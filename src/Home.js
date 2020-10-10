@@ -2,12 +2,6 @@ import React, { Component } from "react";
 import firebase from "firebase";
 
 class Home extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-
-    }
-  }
   render() {
     return(
       <div>

@@ -1,7 +1,6 @@
 import React from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import firebase from 'firebase';
-import './firebase';
 import Home from "../Home";
 
 class SignInScreen extends React.Component {
