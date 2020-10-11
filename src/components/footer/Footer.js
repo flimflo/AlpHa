@@ -17,14 +17,14 @@ function Footer() {
       <div className='footer-links'>
         <div className='footer-link-wrapper'>
           <div className='footer-link-items'>
-            <h2>Contactanos</h2>
+            <h3>Contactanos</h3>
             <Link to='/'>Contact</Link>
             <Link to='/'>Support</Link>
             <Link to='/'>Destinations</Link>
             <Link to='/'>Sponsorships</Link>
           </div>
           <div className='footer-link-items'>
-            <h2>Videos</h2>
+            <h3>Videos</h3>
             <Link to='/'>Submit Video</Link>
             <Link to='/'>Ambassadors</Link>
             <Link to='/'>Agency</Link>
@@ -33,14 +33,14 @@ function Footer() {
         </div>
         <div className='footer-link-wrapper'>
           <div className='footer-link-items'>
-            <h2>Patrocinadores</h2>
+            <h3>Patrocinadores</h3>
             <Link to='/'>How it works</Link>
             <Link to='/'>Testimonials</Link>
             <Link to='/'>Investors</Link>
             <Link to='/'>Terms of Service</Link>
           </div>
           <div className='footer-link-items'>
-            <h2>Redes</h2>
+            <h3>Redes</h3>
             <Link to='/'>Instagram</Link>
             <Link to='/'>Facebook</Link>
             <Link to='/'>Youtube</Link>

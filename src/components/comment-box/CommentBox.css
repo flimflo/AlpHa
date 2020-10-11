@@ -1,0 +1,43 @@
+#header {
+    padding: 8px;
+}
+
+form {
+    display: flex;
+    border: 1px solid #d2d0d0;
+    border-radius: 8px;
+    height: 40px;
+    overflow: hidden;
+}
+.card {
+    box-shadow: 1px 2px 4px #6b6b6b;
+    border-radius: 4px;
+    overflow: hidden;
+    padding: 12px;
+}
+
+input {
+    padding: 8px;
+    border-radius: 2px;
+    border: none;
+    margin: 0;
+    flex-grow: 1;
+}
+
+.comment-list {
+    list-style: none;
+    padding: 0;
+}
+
+.comment {
+    padding: 12px;
+    border-bottom: 1px solid #d2d0d0;
+}
+
+button {
+    padding: 8px;
+    border: none;
+    color: #000000;
+    background-color: white;
+    width: 100px;
+}
