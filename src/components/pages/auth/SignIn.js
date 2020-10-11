@@ -1,9 +1,9 @@
 import React from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import firebase from 'firebase';
-import Home from "../Home";
+import Home from "../home/Home";
 
-class SignInScreen extends React.Component {
+class SignIn extends React.Component {
 
   state = {
     isSignedIn: false // Local signed-in state.
@@ -38,7 +38,6 @@ class SignInScreen extends React.Component {
     if (!this.state.isSignedIn) {
       return (
         <div>
-          <h1>AlpHa</h1>
           <StyledFirebaseAuth uiConfig={this.uiConfig} firebaseAuth={firebase.auth()}/>
         </div>
       );
@@ -49,4 +48,4 @@ class SignInScreen extends React.Component {
   }
 }
 
-export default SignInScreen;
+export default SignIn;
