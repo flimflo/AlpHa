@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import './Navbar.css';
 import { FaBars, FaTimes, FaAutoprefixer } from 'react-icons/fa';
 import { IconContext } from 'react-icons/lib';
+import './Navbar.css';
 
 function Navbar() {
   const [click, setClick] = useState(false);
