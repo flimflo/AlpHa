@@ -10,6 +10,7 @@ import About from "./components/pages/about/About";
 import Sponsors from "./components/pages/sponsors/Sponsors";
 import Footer from "./components/footer/Footer";
 import { CreateLeaguePage } from './components/pages/create-league/CreateLeagePage';
+import { AddTeamToLeague } from './components/pages/add-team-to-league/AddTeamToLeague';
 
 // UsuarioTest: alpha@test.com Contraseña: 123456
 class App extends Component {
@@ -25,6 +26,7 @@ class App extends Component {
           <Route path='/about' exact component={About} />
           <Route path='/sponsors' exact component={Sponsors} />
           <Route path='/create-league' exact component={CreateLeaguePage} />
+          <Route path='/league/:leagueId/signup' exact component={AddTeamToLeague} />
         </Switch>
         <Footer/>
       </Router>
