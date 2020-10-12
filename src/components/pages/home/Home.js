@@ -86,7 +86,15 @@ function Home() {
       <div className="section light-bg">
         <Container>
           <Row className="section-row">
-            <Button variant="outline-dark" onClick={() => firebase.auth().signOut()}>Cerrar sesión</Button>
+            <Button
+              variant="outline-dark"
+              onClick={() => {
+                firebase.auth().signOut();
+                window.location.reload();
+              }}
+            >
+              Cerrar sesión
+                </Button>
           </Row>
         </Container>
       </div>
