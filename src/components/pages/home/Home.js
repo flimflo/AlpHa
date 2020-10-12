@@ -35,6 +35,7 @@ function Home() {
   return (
     <>
       {isLogged 
+      // dependiendo del user mostramos aquí la información (?).
         ? <LoggedState carouselItems={carouselItems} /> 
         : <EmptyState />}
       <div className="section light-bg">
