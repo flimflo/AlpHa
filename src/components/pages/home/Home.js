@@ -1,21 +1,26 @@
 import React from "react";
 import firebase from "firebase";
-import LeaderboardTable from "../../leaderboard-table/LeaderboardTable";
-import CommentBox from "../../comment-box/CommentBox";
-import { 
+import {
   Button,
   Container,
   Row,
-  Col,
   Carousel,
- } from 'react-bootstrap';
-import {carouselImages, commentBoxData, leaderboardData, roleTableData, topListData} from "./Data";
+} from 'react-bootstrap';
+import { carouselImages } from "./Data";
 import './Home.css';
-import RoleTable from "../../role-table/RoleTable";
-import TopList from "../../top-list/TopList";
+import { LoggedState } from "./LoggedState";
+import EmptyState from "./EmptyState";
 
 // TODO: Mover boton de cerrar sesion a otra parte
 function Home() {
+  const [isLogged, setIsLogged] = React.useState(false);
+  React.useEffect(() => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        setIsLogged(!!user);
+      }
+    })
+  }, []);
 
   const carouselItems = carouselImages.images.map((img, index) =>
     <Carousel.Item key={index}>
@@ -27,52 +32,25 @@ function Home() {
     </Carousel.Item>
   );
 
-  return(
+  return (
     <>
+      {isLogged 
+        ? <LoggedState carouselItems={carouselItems} /> 
+        : <EmptyState />}
       <div className="section light-bg">
         <Container>
           <Row className="section-row">
-            <Carousel>
-              {carouselItems}
-            </Carousel>
-          </Row>
-        </Container>
-      </div>
-      <div className="section dark-bg">
-        <Container>
-          <Row className="section-row">
-            <Col sm={6}>
-              <LeaderboardTable {...leaderboardData}/>
-            </Col>
-            <Col sm={6}>
-              <CommentBox {...commentBoxData}/>
-            </Col>
-          </Row>
-        </Container>
-      </div>
-      <div className="section light-bg">
-        <Container>
-          <Row className="section-row">
-            <RoleTable {...roleTableData}/>
-          </Row>
-        </Container>
-      </div>
-      <div className="section dark-bg">
-        <Container>
-          <Row className="section-row">
-            <TopList {...topListData}/>
-          </Row>
-        </Container>
-      </div>
-      <div className="section light-bg">
-        <Container>
-          <Row className="section-row">
-            <Button onClick={() => firebase.auth().signOut()}>Cerrar sesión</Button>
+            <Button onClick={() => {
+              firebase.auth().signOut()
+              window.location.reload()
+            }}
+            >
+              Cerrar sesión</Button>
           </Row>
         </Container>
       </div>
     </>
-    );
+  );
 }
 
 export default Home;
