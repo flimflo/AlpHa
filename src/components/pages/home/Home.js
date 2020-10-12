@@ -21,7 +21,7 @@ import CommentBox from "../../comment-box/CommentBox";
 function Home() {
   const [isLogged, setIsLogged] = React.useState(false);
   React.useEffect(() => {
-    firebase.auth().onAuthStateChanged((user) => {
+    return firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         setIsLogged(!!user);
       }
