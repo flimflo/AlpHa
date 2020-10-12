@@ -2,7 +2,7 @@
     padding: 8px;
 }
 
-form {
+.card > form {
     display: flex;
     border: 1px solid #d2d0d0;
     border-radius: 8px;
@@ -24,9 +24,15 @@ input {
     flex-grow: 1;
 }
 
+.comment-box {
+    max-height: 300px;
+}
+
 .comment-list {
     list-style: none;
     padding: 0;
+    overflow:hidden;
+    overflow-y:scroll;
 }
 
 .comment {
