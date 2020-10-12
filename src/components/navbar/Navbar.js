@@ -75,7 +75,9 @@ function Navbar() {
                   className='nav-links'
                   onClick={closeMobileMenu}
                 >
-                  <Button>
+                  <Button
+                    variant="outline-light"
+                  >
                     Iniciar sesión
                   </Button>
                 </Link>

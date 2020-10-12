@@ -1,9 +1,6 @@
 import React from "react";
 import firebase from "firebase";
 import {
-  Button,
-  Container,
-  Row,
   Carousel,
 } from 'react-bootstrap';
 import { carouselImages } from "./Data";
@@ -34,22 +31,10 @@ function Home() {
 
   return (
     <>
-      {isLogged 
-      // dependiendo del user mostramos aquí la información (?).
-        ? <LoggedState carouselItems={carouselItems} /> 
+      {isLogged
+        // dependiendo del user mostramos aquí la información (?).
+        ? <LoggedState carouselItems={carouselItems} />
         : <EmptyState />}
-      <div className="section light-bg">
-        <Container>
-          <Row className="section-row">
-            <Button onClick={() => {
-              firebase.auth().signOut()
-              window.location.reload()
-            }}
-            >
-              Cerrar sesión</Button>
-          </Row>
-        </Container>
-      </div>
     </>
   );
 }

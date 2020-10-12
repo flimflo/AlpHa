@@ -1,11 +1,13 @@
 import React from "react";
+import firebase from 'firebase';
 import LeaderboardTable from "../../leaderboard-table/LeaderboardTable";
 import CommentBox from "../../comment-box/CommentBox";
 import {
   Container,
   Row,
   Col,
-  Carousel
+  Carousel,
+  Button
 } from 'react-bootstrap';
 import { commentBoxData, leaderboardData, roleTableData, topListData } from "./Data";
 import RoleTable from "../../role-table/RoleTable";
@@ -45,6 +47,13 @@ export const LoggedState = ({ carouselItems }) => (
       <Container>
         <Row className="section-row">
           <TopList {...topListData} />
+        </Row>
+      </Container>
+    </div>
+    <div className="section light-bg">
+      <Container>
+        <Row className="section-row">
+          <Button variant="outline-dark" onClick={() => firebase.auth().signOut()}>Cerrar sesión</Button>
         </Row>
       </Container>
     </div>
