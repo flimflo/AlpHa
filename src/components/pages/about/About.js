@@ -5,7 +5,7 @@ import Presidente from '../../../images/presidente.jpg'
 function About() {
   return (
     <div>
-      <section className="container">
+      <section className="container" style={{ padding: '100px 0' }}>
         <Accordion defaultActiveKey="0">
           <Card>
             <Card.Header>
