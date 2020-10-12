@@ -2,10 +2,13 @@ import React from "react";
 import firebase from "firebase";
 import LeaderboardTable from "../../leaderboard-table/LeaderboardTable";
 import CommentBox from "../../comment-box/CommentBox";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Carousel from "react-bootstrap/Carousel";
+import { 
+  Button,
+  Container,
+  Row,
+  Col,
+  Carousel,
+ } from 'react-bootstrap';
 import {carouselImages, commentBoxData, leaderboardData, roleTableData, topListData} from "./Data";
 import './Home.css';
 import RoleTable from "../../role-table/RoleTable";
@@ -64,7 +67,7 @@ function Home() {
       <div className="section light-bg">
         <Container>
           <Row className="section-row">
-            <button onClick={() => firebase.auth().signOut()}>Cerrar sesión</button>
+            <Button onClick={() => firebase.auth().signOut()}>Cerrar sesión</Button>
           </Row>
         </Container>
       </div>
