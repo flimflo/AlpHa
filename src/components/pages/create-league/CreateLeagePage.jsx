@@ -1,9 +1,8 @@
-import { firestore } from 'firebase'
 import React, { useEffect } from 'react'
 import { Container, Row, Col, Form, Button } from 'react-bootstrap'
 import { useForm, useFieldArray } from 'react-hook-form'
-import { LeaguesCollection, SponsorsCollection, VenueCollection } from '../../../firestoreCollections'
 import { auth } from 'firebase'
+import { LeaguesCollection, SponsorsCollection, VenueCollection } from '../../../firestoreCollections'
 
 function formIsValid(errors) {
     console.log(errors)

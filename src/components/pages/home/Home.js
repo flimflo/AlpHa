@@ -9,10 +9,10 @@ import Carousel from "react-bootstrap/Carousel";
 import './Home.css';
 import { LoggedState } from "./LoggedState";
 import EmptyState from "./EmptyState";
-import { commentBoxData, leaderboardData, roleTableData, topListData } from "./Data";
 import RoleTable from "../../role-table/RoleTable";
 import TopList from "../../top-list/TopList";
 import {useDocument} from "react-firebase-hooks/firestore";
+import { Button } from "react-bootstrap";
 
 // TODO: Mover boton de cerrar sesion a otra parte
 function Home() {
@@ -38,7 +38,7 @@ function Home() {
         <Row className="section-row">
           {isLogged
             // dependiendo del user mostramos aquí la información (?).
-            ? <LoggedState carouselItems={carouselItems} />
+            ? <LoggedState />
             : <EmptyState />}
         </Row>
       </Container>
