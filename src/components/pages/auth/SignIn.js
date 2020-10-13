@@ -1,7 +1,7 @@
 import React from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import firebase from 'firebase';
-import Home from "../home/Home";
+import { Redirect } from 'react-router-dom';
 
 class SignIn extends React.Component {
 
@@ -43,7 +43,7 @@ class SignIn extends React.Component {
       );
     }
     return (
-      <Home/>
+      <Redirect to="/" />
     );
   }
 }

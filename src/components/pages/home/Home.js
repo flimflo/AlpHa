@@ -7,12 +7,23 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Carousel from "react-bootstrap/Carousel";
 import './Home.css';
+import { LoggedState } from "./LoggedState";
+import EmptyState from "./EmptyState";
 import RoleTable from "../../role-table/RoleTable";
 import TopList from "../../top-list/TopList";
 import {useDocument} from "react-firebase-hooks/firestore";
+import { Button } from "react-bootstrap";
 
 // TODO: Mover boton de cerrar sesion a otra parte
 function Home() {
+  const [isLogged, setIsLogged] = React.useState(false);
+  React.useEffect(() => {
+    return firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        setIsLogged(!!user);
+      }
+    })
+  }, []);
 
   const [value, loading, error] = useDocument(
     firebase.firestore().doc('carousel-images/fP15kW3KgUXE52hKDSYB'),
@@ -21,8 +32,16 @@ function Home() {
     }
   );
 
-  return(
-    <>
+  return (
+    <section>
+      <Container>
+        <Row className="section-row">
+          {isLogged
+            // dependiendo del user mostramos aquí la información (?).
+            ? <LoggedState />
+            : <EmptyState />}
+        </Row>
+      </Container>
       <div className="section light-bg">
         <Container>
           <Row className="section-row">
@@ -73,12 +92,20 @@ function Home() {
       <div className="section light-bg">
         <Container>
           <Row className="section-row">
-            <button onClick={() => firebase.auth().signOut()}>Cerrar sesión</button>
+            <Button
+              variant="outline-dark"
+              onClick={() => {
+                firebase.auth().signOut();
+                window.location.reload();
+              }}
+            >
+              Cerrar sesión
+                </Button>
           </Row>
         </Container>
       </div>
-    </>
-    );
+    </section>
+  );
 }
 
 export default Home;

@@ -9,6 +9,7 @@ import Media from "./components/pages/media/Media";
 import About from "./components/pages/about/About";
 import Sponsors from "./components/pages/sponsors/Sponsors";
 import Footer from "./components/footer/Footer";
+import Home from './components/pages/home/Home';
 import { CreateLeaguePage } from './components/pages/create-league/CreateLeagePage';
 
 // UsuarioTest: alpha@test.com Contraseña: 123456
@@ -18,12 +19,13 @@ class App extends Component {
       <Router>
         <Navbar />
         <Switch>
-          <Route path='/' exact component={SignIn} />
+          <Route path='/' exact component={Home} />
           <Route path='/news' exact component={News} />
           <Route path='/regulation' exact component={Regulation} />
           <Route path='/media' exact component={Media} />
           <Route path='/about' exact component={About} />
           <Route path='/sponsors' exact component={Sponsors} />
+          <Route path='/sign-in' exact component={SignIn} />
           <Route path='/create-league' exact component={CreateLeaguePage} />
         </Switch>
         <Footer/>

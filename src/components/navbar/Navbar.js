@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaBars, FaTimes, FaAutoprefixer } from 'react-icons/fa';
 import { IconContext } from 'react-icons/lib';
+import { Button } from 'react-bootstrap';
 import './Navbar.css';
 
 function Navbar() {
@@ -66,6 +67,19 @@ function Navbar() {
                   onClick={closeMobileMenu}
                 >
                   Patrocinadores
+                </Link>
+              </li>
+              <li className='nav-item'>
+                <Link
+                  to='/sign-in'
+                  className='nav-links'
+                  onClick={closeMobileMenu}
+                >
+                  <Button
+                    variant="outline-light"
+                  >
+                    Iniciar sesión
+                  </Button>
                 </Link>
               </li>
             </ul>
