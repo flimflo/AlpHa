@@ -1,21 +1,18 @@
 import React from "react";
 import firebase from "firebase";
-import {
-  Carousel,
-  Container,
-  Row,
-  Col,
-  Button
-} from 'react-bootstrap';
-import { carouselImages } from "./Data";
+import LeaderboardTable from "../../leaderboard-table/LeaderboardTable";
+import CommentBox from "../../comment-box/CommentBox";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Carousel from "react-bootstrap/Carousel";
 import './Home.css';
 import { LoggedState } from "./LoggedState";
 import EmptyState from "./EmptyState";
 import { commentBoxData, leaderboardData, roleTableData, topListData } from "./Data";
 import RoleTable from "../../role-table/RoleTable";
 import TopList from "../../top-list/TopList";
-import LeaderboardTable from "../../leaderboard-table/LeaderboardTable";
-import CommentBox from "../../comment-box/CommentBox";
+import {useDocument} from "react-firebase-hooks/firestore";
 
 // TODO: Mover boton de cerrar sesion a otra parte
 function Home() {
@@ -28,14 +25,11 @@ function Home() {
     })
   }, []);
 
-  const carouselItems = carouselImages.images.map((img, index) =>
-    <Carousel.Item key={index}>
-      <img
-        className="d-block w-100"
-        src={img}
-        alt="..."
-      />
-    </Carousel.Item>
+  const [value, loading, error] = useDocument(
+    firebase.firestore().doc('carousel-images/fP15kW3KgUXE52hKDSYB'),
+    {
+      snapshotListenOptions: { includeMetadataChanges: false },
+    }
   );
 
   return (
@@ -51,9 +45,21 @@ function Home() {
       <div className="section light-bg">
         <Container>
           <Row className="section-row">
-            <Carousel>
-              {carouselItems}
-            </Carousel>
+            {error && <strong>Error: {JSON.stringify(error)}</strong>}
+            {loading && <span>Collection: Loading...</span>}
+            {value && (
+              <Carousel>
+                {value.data().images.map((img, index) =>
+                  <Carousel.Item key={index}>
+                    <img
+                      className="d-block w-100"
+                      src={img}
+                      alt="..."
+                    />
+                  </Carousel.Item>
+                )}
+              </Carousel>
+            )}
           </Row>
         </Container>
       </div>
@@ -61,10 +67,10 @@ function Home() {
         <Container>
           <Row className="section-row">
             <Col sm={6}>
-              <LeaderboardTable {...leaderboardData} />
+              <LeaderboardTable/>
             </Col>
             <Col sm={6}>
-              <CommentBox {...commentBoxData} />
+              <CommentBox/>
             </Col>
           </Row>
         </Container>
@@ -72,14 +78,14 @@ function Home() {
       <div className="section light-bg">
         <Container>
           <Row className="section-row">
-            <RoleTable {...roleTableData} />
+            <RoleTable/>
           </Row>
         </Container>
       </div>
       <div className="section dark-bg">
         <Container>
           <Row className="section-row">
-            <TopList {...topListData} />
+            <TopList/>
           </Row>
         </Container>
       </div>

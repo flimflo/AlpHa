@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import './App.css';
+// import './App.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Navbar from './components/navbar/Navbar';
 import SignIn from "./components/pages/auth/SignIn";
@@ -10,6 +10,8 @@ import About from "./components/pages/about/About";
 import Sponsors from "./components/pages/sponsors/Sponsors";
 import Footer from "./components/footer/Footer";
 import Home from './components/pages/home/Home';
+import { CreateLeaguePage } from './components/pages/create-league/CreateLeagePage';
+
 // UsuarioTest: alpha@test.com Contraseña: 123456
 class App extends Component {
   render() {
@@ -24,6 +26,7 @@ class App extends Component {
           <Route path='/about' exact component={About} />
           <Route path='/sponsors' exact component={Sponsors} />
           <Route path='/sign-in' exact component={SignIn} />
+          <Route path='/create-league' exact component={CreateLeaguePage} />
         </Switch>
         <Footer/>
       </Router>

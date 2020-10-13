@@ -24,9 +24,15 @@ input {
     flex-grow: 1;
 }
 
+.comment-box {
+    max-height: 300px;
+}
+
 .comment-list {
     list-style: none;
     padding: 0;
+    overflow:hidden;
+    overflow-y:scroll;
 }
 
 .comment {
