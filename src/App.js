@@ -11,6 +11,7 @@ import Sponsors from "./components/pages/sponsors/Sponsors";
 import Footer from "./components/footer/Footer";
 import Home from './components/pages/home/Home';
 import { CreateLeaguePage } from './components/pages/create-league/CreateLeagePage';
+import { AddTeamToLeague } from './components/pages/add-team-to-league/AddTeamToLeague';
 
 // UsuarioTest: alpha@test.com Contraseña: 123456
 class App extends Component {
@@ -27,6 +28,7 @@ class App extends Component {
           <Route path='/sponsors' exact component={Sponsors} />
           <Route path='/sign-in' exact component={SignIn} />
           <Route path='/create-league' exact component={CreateLeaguePage} />
+          <Route path='/league/:leagueId/signup' exact component={AddTeamToLeague} />
         </Switch>
         <Footer/>
       </Router>
