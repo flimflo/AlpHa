@@ -30,8 +30,6 @@ function Footer() {
             <Link to='/'>Agency</Link>
             <Link to='/'>Influencer</Link>
           </div>
-        </div>
-        <div className='footer-link-wrapper'>
           <div className='footer-link-items'>
             <h3>Patrocinadores</h3>
             <Link to='/'>How it works</Link>

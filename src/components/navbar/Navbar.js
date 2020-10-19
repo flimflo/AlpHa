@@ -4,8 +4,12 @@ import { FaBars, FaTimes, FaAutoprefixer } from 'react-icons/fa';
 import { IconContext } from 'react-icons/lib';
 import { Button } from 'react-bootstrap';
 import './Navbar.css';
+import {useCurrentUser} from "../pages/auth/CurrentUser";
+import { auth } from '../../firebase';
 
 function Navbar() {
+  const currentUser = useCurrentUser()
+
   const [click, setClick] = useState(false);
 
   const handleClick = () => setClick(!click);
@@ -69,7 +73,19 @@ function Navbar() {
                   Patrocinadores
                 </Link>
               </li>
+              {currentUser &&
               <li className='nav-item'>
+                <Link
+                  to={`/league/${currentUser.leagueId}/signup`}
+                  className='nav-links'
+                  onClick={closeMobileMenu}
+                >
+                  Mi Equipo
+                </Link>
+              </li>
+              }
+              <li className='nav-item'>
+                {!currentUser ?
                 <Link
                   to='/sign-in'
                   className='nav-links'
@@ -77,10 +93,24 @@ function Navbar() {
                 >
                   <Button
                     variant="outline-light"
+
                   >
                     Iniciar sesión
                   </Button>
                 </Link>
+                :
+                  <div className='nav-links'>
+                    <Button
+                      variant="outline-light"
+                      onClick={() => {
+                        auth.signOut();
+                        window.location.reload();
+                      }}
+                    >
+                      Cerrar sesión
+                    </Button>
+                  </div>
+                }
               </li>
             </ul>
           </div>
