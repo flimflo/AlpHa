@@ -1,6 +1,7 @@
 import React from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-import firebase from 'firebase';
+import firebase from 'firebase'
+import { auth } from '../../../firebase';
 import { Redirect } from 'react-router-dom';
 
 class SignIn extends React.Component {
@@ -24,7 +25,7 @@ class SignIn extends React.Component {
 
   // Listen to the Firebase Auth state and set the local state.
   componentDidMount() {
-    this.unregisterAuthObserver = firebase.auth().onAuthStateChanged(
+    this.unregisterAuthObserver = auth.onAuthStateChanged(
       (user) => this.setState({isSignedIn: !!user})
     );
   }
@@ -38,7 +39,7 @@ class SignIn extends React.Component {
     if (!this.state.isSignedIn) {
       return (
         <div>
-          <StyledFirebaseAuth uiConfig={this.uiConfig} firebaseAuth={firebase.auth()}/>
+          <StyledFirebaseAuth uiConfig={this.uiConfig} firebaseAuth={auth}/>
         </div>
       );
     }
