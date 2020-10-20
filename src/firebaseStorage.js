@@ -17,10 +17,3 @@ export function getStoragePath(path) {
     .child(path)
     .getDownloadURL()
 }
-
-export function openStoragePath(path) {
-  return storageRef
-    .child(path)
-    .getDownloadURL()
-    .then(url => window.open(url, '_'))
-}
