@@ -12,16 +12,19 @@ import Footer from "./components/footer/Footer";
 import Home from './components/pages/home/Home';
 import { CreateLeaguePage } from './components/pages/create-league/CreateLeagePage';
 import { AddTeamToLeague } from './components/pages/add-team-to-league/AddTeamToLeague';
+import { useCurrentUser } from './components/pages/auth/CurrentUser';
+import { NewsEditor } from './components/pages/news/NewsEditor';
 
 // UsuarioTest: alpha@test.com Contraseña: 123456
-class App extends Component {
-  render() {
+function App() {
+    const user = useCurrentUser()
+    
     return (
       <Router>
         <Navbar />
         <Switch>
           <Route path='/' exact component={Home} />
-          <Route path='/news' exact component={News} />
+          <Route path='/league/:leagueId/news' component={News} />
           <Route path='/regulation' exact component={Regulation} />
           <Route path='/media' exact component={Media} />
           <Route path='/about' exact component={About} />
@@ -29,11 +32,17 @@ class App extends Component {
           <Route path='/sign-in' exact component={SignIn} />
           <Route path='/create-league' exact component={CreateLeaguePage} />
           <Route path='/league/:leagueId/signup' exact component={AddTeamToLeague} />
+
+          {/* Admin */}
+          {
+            user?.isAdmin && <>
+              <Route path='/admin/news' component={NewsEditor} />
+              </>
+          }
         </Switch>
         <Footer/>
       </Router>
-    );
+    )
   }
-}
 
 export default App;
