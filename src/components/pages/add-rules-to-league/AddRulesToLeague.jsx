@@ -3,7 +3,7 @@ import { useDocumentDataOnce } from "react-firebase-hooks/firestore"
 import { Alert, Container, Col, Row, Form, Button} from "react-bootstrap"
 import { useForm, useFieldArray } from "react-hook-form"  
 import { useParams } from "react-router-dom"
-import { LeaguesCollection, TeamsCollection, RulesCollection } from "../../../firestoreCollections"
+import { LeaguesCollection, RulesCollection } from "../../../firestoreCollections"
 
 
 export function AddRulesToLeague() {
@@ -16,11 +16,8 @@ export function AddRulesToLeague() {
         name: "players"
     })
     const [success, setSuccess] = useState(false)
-    //let [formStatusEdit, setFormEdit] = useState(false)
-    //let [formStatusCreate, setFormCreate] = useState(false)
     let [rules, setRules] = useState([])
     let [rulesDoc, setRulesDoc] = useState([])
-    //let [teamSelected, setTeamSelected] = useState('')
     let [teamPlayers, setTeamPlayers] = useState([])
     
     async function addRules({rules = []}) {
@@ -66,24 +63,6 @@ export function AddRulesToLeague() {
             addRules({rules})
         }
     }
-
-    /*const changeFormStatusEdit = () => {
-        getTeams()
-        setFormEdit(true)
-        setFormCreate(false)
-        setSuccess(false)
-    }
-
-    const changeFormStatusCreate = () => {
-        setFormEdit(false)
-        setFormCreate(true)
-        setSuccess(false)
-    }
-
-    const changeTeamSelected = (event) => {
-        setTeamSelected(event.target.value)
-        setTeamPlayers(teams.find(team => team.teamName === event.target.value)?.players)  
-    };*/
 
     useEffect(() => {
         getRules()
