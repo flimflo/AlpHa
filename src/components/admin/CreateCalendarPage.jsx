@@ -2,31 +2,30 @@ import React, { useEffect } from 'react'
 import { Container, Row, Col, Form, Button } from 'react-bootstrap'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { auth } from 'firebase'
-import { LeaguesCollection, SponsorsCollection, VenueCollection } from '../../../firestoreCollections'
+// import { CalendarsCollection } from '../../../firestoreCollections'
 
 function formIsValid(errors) {
   console.log(errors)
   return Object.entries(errors).length === 0
 }
 
-async function createLeague({ leagueName, city, venues = [], sponsors = [] }) {
+async function createCalendar({ leagues, city, venues = [], sponsors = [] }) {
   const currentUserId = auth().currentUser.uid
   if (!currentUserId) {
-    throw new Error("Debe haber una sesion de admin abierta para crear una liga")
+    throw new Error("Debe haber una sesion de admin abierta para crear un calendario")
   }
 
-  const newLeagueDoc = await LeaguesCollection.add({
-    leagueName: leagueName,
-    city: city,
-    adminId: currentUserId
-  })
+  // const newCalendarDoc = await CalendarsCollection.add({
+  //   city: city,
+  //   adminId: currentUserId
+  // })
 
-  await SponsorsCollection.doc(newLeagueDoc.id).set({ sponsors })
-  await VenueCollection.doc(newLeagueDoc.id).set({ venues })
+  // await SponsorsCollection.doc(newCalendarDoc.id).set({ sponsors })
+  // await VenueCollection.doc(newCalendarDoc.id).set({ venues })
 }
 
 
-export function CreateLeaguePage() {
+export function CreateCalendarPage() {
   const { register, handleSubmit, control, errors } = useForm()
   const { fields: venueFields, append: appendVenue } = useFieldArray({
     control,
@@ -44,8 +43,8 @@ export function CreateLeaguePage() {
     <Container fluid md={3}>
       <Row>
         <Col>
-          <h1 className="mb-3">Crea tu liga</h1>
-          <Form style={{ width: 400 }} onSubmit={handleSubmit(createLeague)}>
+          <h1 className="mb-3">Crea calendario de partidos</h1>
+          <Form style={{ width: 400 }} onSubmit={handleSubmit(createCalendar)}>
             <hr />
             <h3>Información General</h3>
             <Form.Group>
