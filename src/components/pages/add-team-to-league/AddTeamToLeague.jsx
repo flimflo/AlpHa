@@ -144,11 +144,11 @@ export function AddTeamToLeague() {
                     .map((player, index) => (
                         <Form.Group key={index}>
                             <Form.Label>Nombre del Jugador #{index + 1}</Form.Label>
-                            <Form.Control placeholder="Ej. Ariel" value={player.name} name={`players[${index}].name`} ref={register({ required: true })} />
+                            <Form.Control placeholder="Ej. Ariel" defaultValue={player.name} name={`players[${index}].name`} ref={register({ required: true })} />
                             <Form.Label>Numero del Jugador #{index + 1}</Form.Label>
-                            <Form.Control type="number" placeholder="Ej. 3"  value={player.number} name={`players[${index}].number`} ref={register({ required: true })} />
+                            <Form.Control type="number" placeholder="Ej. 3"  defaultValue={player.number} name={`players[${index}].number`} ref={register({ required: true })} />
                             <Form.Label>Foto del Jugador #{index + 1}</Form.Label>
-                            <Form.Control className="mb-5"  placeholder="Ej. poner url" value={player.photoUrl} name={`players[${index}].photoUrl`} ref={register({ required: true })} />
+                            <Form.Control className="mb-5"  placeholder="Ej. poner url" defaultValue={player.photoUrl} name={`players[${index}].photoUrl`} ref={register({ required: true })} />
                         </Form.Group>
                     ))}
                     
