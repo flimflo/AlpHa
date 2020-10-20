@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { Container, Row, Col, Form, Button } from 'react-bootstrap'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { auth } from 'firebase'
-import { CalendarsCollection } from '../../../firestoreCollections'
+// import { CalendarsCollection } from '../../../firestoreCollections'
 
 function formIsValid(errors) {
   console.log(errors)
@@ -15,13 +15,13 @@ async function createCalendar({ leagues, city, venues = [], sponsors = [] }) {
     throw new Error("Debe haber una sesion de admin abierta para crear un calendario")
   }
 
-  const newCalendarDoc = await CalendarsCollection.add({
-    city: city,
-    adminId: currentUserId
-  })
+  // const newCalendarDoc = await CalendarsCollection.add({
+  //   city: city,
+  //   adminId: currentUserId
+  // })
 
-  await SponsorsCollection.doc(newCalendarDoc.id).set({ sponsors })
-  await VenueCollection.doc(newCalendarDoc.id).set({ venues })
+  // await SponsorsCollection.doc(newCalendarDoc.id).set({ sponsors })
+  // await VenueCollection.doc(newCalendarDoc.id).set({ venues })
 }
 
 
