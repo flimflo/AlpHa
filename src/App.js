@@ -16,6 +16,7 @@ import { AddRulesToLeague } from './components/pages/add-rules-to-league/AddRule
 import { useCurrentUser } from './components/pages/auth/CurrentUser';
 import { NewsEditor } from './components/pages/news/NewsEditor';
 import { CreateCalendarPage } from './components/admin/CreateCalendarPage';
+import { MediaEditor } from './components/pages/media/MediaEditor';
 
 // UsuarioTest: alpha@test.com Contraseña: 123456
 function App() {
@@ -39,6 +40,7 @@ function App() {
           user?.isAdmin &&
           <>
             <Route path='/admin/news' component={NewsEditor} />
+            <Route path='/admin/media' component={MediaEditor} />
             <Route path='/create-league' exact component={CreateLeaguePage} />
             <Route path='/create-calendar' exact component={CreateCalendarPage} />
           </>
