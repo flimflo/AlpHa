@@ -12,6 +12,7 @@ import Footer from "./components/footer/Footer";
 import Home from './components/pages/home/Home';
 import { CreateLeaguePage } from './components/pages/create-league/CreateLeagePage';
 import { AddTeamToLeague } from './components/pages/add-team-to-league/AddTeamToLeague';
+import { AddRulesToLeague } from './components/pages/add-rules-to-league/AddRulesToLeague';
 import { useCurrentUser } from './components/pages/auth/CurrentUser';
 import { NewsEditor } from './components/pages/news/NewsEditor';
 import { CreateCalendarPage } from './components/admin/CreateCalendarPage';
@@ -32,7 +33,7 @@ function App() {
         <Route path='/sponsors' exact component={Sponsors} />
         <Route path='/sign-in' exact component={SignIn} />
         <Route path='/league/:leagueId/signup' exact component={AddTeamToLeague} />
-
+        <Route path='/league/:leagueId/addrules' exact component={AddRulesToLeague} />
         {/* Admin */}
         {
           user?.isAdmin &&

@@ -38,7 +38,7 @@ export function AddTeamToLeague() {
         await TeamsCollection.where("leagueId", "==", leagueId)
             .get().then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
-                    teamsList.push({ id: doc.id, ...doc.data()})
+                    teamsList.push({ id: doc.id, ...doc.data() })
                     docsList = doc
                 })
             })
@@ -86,7 +86,7 @@ export function AddTeamToLeague() {
                 {leagueWasNotFound && <Alert variant="danger">La liga que estas buscando no existe</Alert>}
 
                 {!leagueWasNotFound && <Col>
-                    <h1 className="mb-3">Administra tus equipos de la liga  {value?.leagueName}</h1>
+                    <h1 className="mb-3">Administra tus equipo de la liga  {value?.leagueName}</h1>
 
                     <Button variant="primary" onClick={changeFormStatusEdit}>Actualizar Equipo</Button>
                     <Button variant="primary" onClick={changeFormStatusCreate}>Crear Equipo</Button>
@@ -133,7 +133,7 @@ export function AddTeamToLeague() {
                         <h3>Información de equipo {teamSelected}</h3>
                         <Form.Group>
                             <Form.Label>Nombre del equipo</Form.Label>
-                            <select value={teamSelected} onChange={changeTeamSelected}>
+                            <select onChange={changeTeamSelected}>
                                 {teams.map(function (team) {
                                     return <option value={team.teamName} key={team.teamName}>{team.teamName}</option>;
                                 })}
@@ -146,24 +146,13 @@ export function AddTeamToLeague() {
                             .map((player, index) => (
                                 <Form.Group key={index}>
                                     <Form.Label>Nombre del Jugador #{index + 1}</Form.Label>
-                                    <Form.Control placeholder="Ej. Ariel" value={player.name} name={`players[${index}].name`} ref={register({ required: true })} />
+                                    <Form.Control placeholder="Ej. Ariel" defaultValue={player.name} name={`players[${index}].name`} ref={register({ required: true })} />
                                     <Form.Label>Numero del Jugador #{index + 1}</Form.Label>
-                                    <Form.Control type="number" placeholder="Ej. 3" value={player.number} name={`players[${index}].number`} ref={register({ required: true })} />
+                                    <Form.Control type="number" placeholder="Ej. 3" defaultValue={player.number} name={`players[${index}].number`} ref={register({ required: true })} />
                                     <Form.Label>Foto del Jugador #{index + 1}</Form.Label>
-                                    <Form.Control className="mb-5" placeholder="Ej. poner url" value={player.photoUrl} name={`players[${index}].photoUrl`} ref={register({ required: true })} />
+                                    <Form.Control className="mb-5" placeholder="Ej. poner url" defaultValue={player.photoUrl} name={`players[${index}].photoUrl`} ref={register({ required: true })} />
                                 </Form.Group>
                             ))}
-
-                        {fields.map((item, index) => (
-                            <Form.Group key={index}>
-                                <Form.Label>Nombre del Jugador #{teamPlayers.length + index + 1}</Form.Label>
-                                <Form.Control placeholder="Ej. Ariel" name={`players[${teamPlayers.length + index}].name`} ref={register({ required: true })} />
-                                <Form.Label>Numero del Jugador #{teamPlayers.length + index + 1}</Form.Label>
-                                <Form.Control type="number" placeholder="Ej. 3" name={`players[${teamPlayers.length + index}].number`} ref={register({ required: true })} />
-                                <Form.Label>Foto del Jugador #{teamPlayers.length + index + 1}</Form.Label>
-                                <Form.Control className="mb-5" placeholder="Ej. poner url" name={`players[${teamPlayers.length + index}].photoUrl`} ref={register({ required: true })} />
-                            </Form.Group>
-                        ))}
                         <Button variant="secondary" onClick={append}>Agregar jugador</Button>
 
                         <hr />
