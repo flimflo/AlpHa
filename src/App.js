@@ -24,7 +24,7 @@ import { useLeagueData } from './useLeagueData';
 // UsuarioTest: alpha@test.com Contraseña: 123456
 function App() {
   const user = useCurrentUser()
-  const { leagueId, color, title } = useLeagueData()
+  const { leagueId, color, leagueName } = useLeagueData()
   
   return (
     <>
@@ -37,7 +37,7 @@ function App() {
       >
         Cerrar sesión
       </Button></h1>:
-        <Navbar title={title} color={color} leagueId={leagueId} />
+        <Navbar title={leagueName} color={color} leagueId={leagueId} />
       }
       
       <Switch>
@@ -52,6 +52,7 @@ function App() {
             <Redirect to='/admin/create-calendar' />
           </>
         }
+        <Route path="/sign-in" exact component={SignIn} />
         {/* Pantallas que ven los usuarios normales */}
         <Route path='/:leagueId' exact component={Home} />
         <Route path='/:leagueId/news' component={News} />

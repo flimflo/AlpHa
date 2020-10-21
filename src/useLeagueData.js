@@ -4,7 +4,7 @@ import { LeaguesCollection } from "./firestoreCollections"
 
 export function useLeagueData() {
     const leagueId =  useLocation().pathname?.split('/')?.[1] || 'empty' //esta gacho esto
-    const [{ title, color } = {}] = useDocumentData(LeaguesCollection.doc(leagueId))
+    const [{ leagueName, color } = {}] = useDocumentData(LeaguesCollection.doc(leagueId))
 
-    return { leagueId, title, color}
+    return { leagueId, leagueName, color}
 }
