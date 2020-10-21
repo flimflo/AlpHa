@@ -9,7 +9,7 @@ function formIsValid(errors) {
   return Object.entries(errors).length === 0
 }
 
-async function createLeague({ leagueName, city, venues = [], sponsors = [] }) {
+async function createLeague({ leagueName, color, city, venues = [], sponsors = [] }) {
   const currentUserId = auth().currentUser.uid
   if (!currentUserId) {
     throw new Error("Debe haber una sesion de admin abierta para crear una liga")
@@ -17,6 +17,7 @@ async function createLeague({ leagueName, city, venues = [], sponsors = [] }) {
 
   const newLeagueDoc = await LeaguesCollection.add({
     leagueName: leagueName,
+    color: color,
     city: city,
     adminId: currentUserId
   })
@@ -51,6 +52,10 @@ export function CreateLeaguePage() {
             <Form.Group>
               <Form.Label>Nombre de la liga</Form.Label>
               <Form.Control placeholder="Ej. Liga premier" name="leagueName" ref={register({ required: true })} />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Color oficial de la liga</Form.Label>
+              <Form.Control placeholder="Ej. #fcba03" name="color" ref={register({ required: true })} />
             </Form.Group>
             <Form.Group>
               <Form.Label>Ciudad</Form.Label>
