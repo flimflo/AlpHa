@@ -31,7 +31,7 @@ export function MediaEditor() {
   }, [user?.leagueId])
 
 
-  async function createNewsPost({ title, picture, content }, leagueId) {
+  async function createNewsPost({ title, picture }, leagueId) {
     const now = firestore.Timestamp.now()
     const path = `/${leagueId}/${now.toMillis()}${picture[0].name}`
 
