@@ -6,12 +6,12 @@ import "../regulation/Regulation.css"
 
 function Regulation() {
   const {leagueId} = useParams()
-  const [value, loading, error] = useDocumentDataOnce(LeaguesCollection.doc("DMpXPRsBI9DuOm8gOA7y")) //leagueId)
+  const [value, loading, error] = useDocumentDataOnce(LeaguesCollection.doc(leagueId))
   let [rules, setRules] = useState([])
 
   async function getRules() {
     let rulesList = []
-    await RulesCollection.where("leagueId", "==", "DMpXPRsBI9DuOm8gOA7y") //leagueId)
+    await RulesCollection.where("leagueId", "==", leagueId)
     .get().then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
              for (let i = 0; i < doc.data().rules.length; i++) {
