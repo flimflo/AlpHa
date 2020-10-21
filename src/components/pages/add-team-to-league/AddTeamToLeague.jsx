@@ -19,9 +19,7 @@ export function AddTeamToLeague() {
     let [formStatusEdit, setFormEdit] = useState(false)
     let [formStatusCreate, setFormCreate] = useState(false)
     let [teams, setTeams] = useState([])
-    let [teamsDoc, setTeamsDoc] = useState([])
     let [teamSelected, setTeamSelected] = useState('')
-    let [teamPlayers, setTeamPlayers] = useState([])
 
     async function addTeam({ teamName, players = [] }, leagueId) {
         await TeamsCollection.add({
@@ -34,16 +32,13 @@ export function AddTeamToLeague() {
 
     async function getTeams() {
         let teamsList = []
-        let docsList = null
         await TeamsCollection.where("leagueId", "==", leagueId)
             .get().then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
                     teamsList.push({ id: doc.id, ...doc.data() })
-                    docsList = doc
                 })
             })
         if (teamsList.length > 0) setTeams(teamsList); setTeamSelected(teamsList[0].teamName);
-        setTeamsDoc(docsList)
     }
 
     async function updateTeamPlayers(vals) {
@@ -77,7 +72,6 @@ export function AddTeamToLeague() {
 
     const changeTeamSelected = (event) => {
         setTeamSelected(event.target.value)
-        setTeamPlayers(teams.find(team => team.teamName === event.target.value)?.players)
     };
 
     return (
@@ -105,7 +99,6 @@ export function AddTeamToLeague() {
                             <Form.Label>Nombre del equipo</Form.Label>
                             <Form.Control placeholder="Ej. Valax" name="teamName" ref={register({ required: true })} />
                         </Form.Group>
-
                         <hr />
                         <h3>Jugadores</h3>
                         {fields.map((item, index) => (
@@ -154,7 +147,6 @@ export function AddTeamToLeague() {
                                 </Form.Group>
                             ))}
                         <Button variant="secondary" onClick={append}>Agregar jugador</Button>
-
                         <hr />
                         <Button variant="primary" type="submit">Guardar Equipo</Button>
                         <hr />
