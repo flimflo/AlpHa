@@ -49,7 +49,6 @@ function App() {
             <Route path='/admin/news' exact component={NewsEditor} />
             <Route path='/admin/media' exact component={MediaEditor} />
             <Route path='/admin/create-calendar' exact component={CreateCalendarPage} />
-            <Redirect to='/admin/create-calendar' />
           </>
         }
         <Route path="/sign-in" exact component={SignIn} />
@@ -57,7 +56,7 @@ function App() {
         <Route path='/:leagueId' exact component={Home} />
         <Route path='/:leagueId/news' component={News} />
         <Route path='/:leagueId/regulation' exact component={Regulation} />
-        <Route path='/:leagueId//media' exact component={Media} />
+        <Route path='/:leagueId/media' exact component={Media} />
         <Route path='/:leagueId/about' exact component={About} />
         <Route path='/:leagueId/sponsors' exact component={Sponsors} />
         {

@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { Button, Col, Container, Form, Modal, Row, Table } from 'react-bootstrap'
 import { useCollectionData } from 'react-firebase-hooks/firestore'
 import { useForm } from 'react-hook-form'
+import { uploadFile } from '../../../firebaseStorage'
 import { NewsCollection } from '../../../firestoreCollections'
 import { useCurrentUser } from '../auth/CurrentUser'
 
@@ -14,14 +15,23 @@ export function NewsEditor() {
   const [data, loading, error] = useCollectionData(
     NewsCollection.where('leagueId', '==', user?.leagueId || '').orderBy('date', 'desc'), { idField: "postId" })
   const showPhotoField = watch('showPhotoField', false)
+  const pictureFile = watch('picture')
 
-  async function createNewsPost({ title, picture = null, content }, leagueId) {
+  async function createNewsPost({ title, picture = [], content }, leagueId) {
+    const now = firestore.Timestamp.now()
+    let picturePath = null
+    
+    if (picture.length > 0){
+      picturePath = `/${leagueId}/${now.toMillis()}${picture[0].name}`
+      await uploadFile(picture[0], picturePath)
+    }
+
     await NewsCollection.add({
       leagueId,
       title,
-      picture,
+      picture: picturePath,
       content,
-      date: firestore.Timestamp.now()
+      date: now,
     })
 
     setShow(false)
@@ -51,10 +61,16 @@ export function NewsEditor() {
               label="Incluir foto"
             />
             {showPhotoField &&
-              <Form.Group>
-                <Form.Label>Url de foto</Form.Label>
-                <Form.Control placeholder="Ej. www.google.com/foto.jpg" name="picture" ref={register({ required: true })} />
-              </Form.Group>
+              <Form.File
+                ref={register({ required: true })}
+                id="picture"
+                multiple={false}
+                accept=".jpeg,.jpg,.png"
+                name="picture"
+                data-browse="Subir"
+                label={pictureFile?.length > 0 && pictureFile[0].name || "Fotografia"}
+                custom
+              />
             }
             <Form.Group>
               <Form.Label>Contenido</Form.Label>
