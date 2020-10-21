@@ -26,7 +26,7 @@ function RoleTable() {
             </tr>
           </thead>
           <tbody>
-            {data[0].roles && data[0].roles.map((rol, index) =>
+            {data?.[0]?.roles?.map((rol, index) =>
               <tr className="tablerow" key={index}>
                 <td>{rol.equipoA}</td>
                 <td>{rol.equipoB}</td>
