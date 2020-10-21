@@ -11,28 +11,27 @@ import {
 } from 'react-icons/fa';
 
 // TODO: Cambiar links
-function Footer({ color = '#1c2237'}) {
+function Footer({ color = '#1c2237', leagueId = '/empty'}) {
   return (
     <div className='footer-container' style={{ backgroundColor: color }}>
       <div className='footer-links'>
         <div className='footer-link-wrapper'>
           <div className='footer-link-items'>
-            <h3>Contactanos</h3>
-            <Link to='/'>Contact</Link>
-            <Link to='/'>Support</Link>
-            <Link to='/'>Destinations</Link>
-            <Link to='/'>Sponsorships</Link>
+            <h3>Alpha</h3>
+            <Link to='/create-league'>Crea tu liga</Link>
+            <Link to={`/${leagueId}/signup`}>Inscribe a tu equipo</Link>
           </div>
           <div className='footer-link-items'>
-            <h3>Videos</h3>
-            <Link to='/'>Submit Video</Link>
-            <Link to='/'>Ambassadors</Link>
+            <h3>Secciones</h3>
+            <Link to={`/${leagueId}/news`}>Noticias</Link>
+            <Link to={`/${leagueId}/media`}>Multimedia</Link>
+            <Link to={`/${leagueId}/regulation`}>Reglamento</Link>
             <Link to='/'>Agency</Link>
             <Link to='/'>Influencer</Link>
           </div>
           <div className='footer-link-items'>
             <h3>Patrocinadores</h3>
-            <Link to='/'>How it works</Link>
+            <Link to={`/${leagueId}/media`}>Multimedia</Link>
             <Link to='/'>Testimonials</Link>
             <Link to='/'>Investors</Link>
             <Link to='/'>Terms of Service</Link>

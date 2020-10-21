@@ -42,10 +42,9 @@ class SignIn extends React.Component {
           <StyledFirebaseAuth uiConfig={this.uiConfig} firebaseAuth={auth}/>
         </div>
       );
-    }
-    return (
-      <Redirect to="/" />
-    );
+    } 
+    
+    return null
   }
 }
 

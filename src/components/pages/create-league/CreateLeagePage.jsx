@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { Container, Row, Col, Form, Button } from 'react-bootstrap'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { auth } from 'firebase'
-import { LeaguesCollection, SponsorsCollection, VenueCollection } from '../../../firestoreCollections'
+import { LeaguesCollection, SponsorsCollection, UserClaimsCollection, VenueCollection } from '../../../firestoreCollections'
 
 function formIsValid(errors) {
   return Object.entries(errors).length === 0
@@ -23,6 +23,11 @@ async function createLeague({ leagueName, color, city, venues = [], sponsors = [
 
   await SponsorsCollection.doc(newLeagueDoc.id).set({ sponsors })
   await VenueCollection.doc(newLeagueDoc.id).set({ venues })
+  await UserClaimsCollection.doc(currentUserId).set({
+    isAdmin: true,
+    leagueId: newLeagueDoc.id,
+  })
+  window.location.replace('/admin')
 }
 
 

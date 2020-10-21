@@ -18,9 +18,20 @@ import { useCurrentUser } from './components/pages/auth/CurrentUser';
 import { NewsEditor } from './components/pages/news/NewsEditor';
 import { CreateCalendarPage } from './components/admin/CreateCalendarPage';
 import { MediaEditor } from './components/pages/media/MediaEditor';
-import { Button } from 'react-bootstrap';
-import { auth } from 'firebase';
+
 import { useLeagueData } from './useLeagueData';
+import { Alert } from 'react-bootstrap';
+
+
+const copyLeagueToClipboard = (leagueId) => () => {
+  const el = document.createElement('input');
+  el.value = `${window.location.host}/${leagueId}`
+  document.body.appendChild(el)
+  el.select()
+  document.execCommand('copy')
+  document.body.removeChild(el);
+  alert("El link fue copiado al portapapeles")
+}
 
 // UsuarioTest: alpha@test.com Contraseña: 123456
 function App() {
@@ -34,6 +45,9 @@ function App() {
           user?.isAdmin &&
           <>
             <AdminNavbar />
+            <Alert variant="primary" onClick={copyLeagueToClipboard(user.leagueId)}>
+              Haz click aqui para copiar el link de tu liga.
+            </Alert>
             <Switch>
               <Route path='/admin/regulation' component={AddRulesToLeague} />
               <Route path='/admin/news' component={NewsEditor} />
@@ -44,19 +58,23 @@ function App() {
           </>
         }
         <Route path="/admin" exact component={SignIn} />
-        {!user?.isAdmin &&
+
+        {!user && <Route path='/create-league' component={SignIn} />}
+        {!user &&
           <>
             <Navbar title={leagueName} color={color} leagueId={leagueId} />
             <Switch>
               {/* Pantallas que ven los usuarios normales */}
+              <Route path='/create-league' component={SignIn} />
               <Route path='/:leagueId' exact component={Home} />
               <Route path='/:leagueId/news' component={News} />
               <Route path='/:leagueId/regulation' exact component={Regulation} />
               <Route path='/:leagueId/media' exact component={Media} />
               <Route path='/:leagueId/about' exact component={About} />
               <Route path='/:leagueId/sponsors' exact component={Sponsors} />
+              <Route path="/:leagueId/signup" exact component={SignIn} />
             </Switch>
-            <Footer color={color} />
+            <Footer color={color} leagueId={leagueId} />
 
           </>
         }
