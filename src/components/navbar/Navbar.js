@@ -1,36 +1,34 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { FaBars, FaTimes, FaAutoprefixer } from 'react-icons/fa';
-import { IconContext } from 'react-icons/lib';
 import { Button } from 'react-bootstrap';
-import './Navbar.css';
-import {useCurrentUser} from "../pages/auth/CurrentUser";
+import { FaAutoprefixer, FaBars, FaTimes } from 'react-icons/fa';
+import { IconContext } from 'react-icons/lib';
+import { Link } from 'react-router-dom';
 import { auth } from '../../firebase';
+import { useCurrentUser } from "../pages/auth/CurrentUser";
+import './Navbar.css';
 
-function Navbar() {
-  const currentUser = useCurrentUser()
-
+function Navbar({ leagueId = '', title = 'AlpHa', color = '#1c2237'}) {
+  const currentUser = useCurrentUser()  
   const [click, setClick] = useState(false);
-
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
 
   return (
     <>
       <IconContext.Provider value={{ color: '#fff' }}>
-        <nav className='navbar'>
+        <nav className='navbar' style={{ backgroundColor: color }}>
           <div className='navbar-container container'>
-            <Link to='/' className='navbar-logo' onClick={closeMobileMenu}>
+            <Link                   to={`/${leagueId}`} className='navbar-logo' onClick={closeMobileMenu}>
               <FaAutoprefixer className='navbar-icon' />
-              AlpHa
+              {title || 'AlpHa'}
             </Link>
             <div className='menu-icon' onClick={handleClick}>
               {click ? <FaTimes /> : <FaBars />}
             </div>
-            <ul className={click ? 'nav-menu active' : 'nav-menu'}>
+            <ul style={{ backgroundColor: color }} className={click ? 'nav-menu active' : 'nav-menu'}>
               <li className='nav-item'>
                 <Link
-                  to='/news'
+                  to={`/${leagueId}/news`}
                   className='nav-links'
                   onClick={closeMobileMenu}
                 >
@@ -39,7 +37,7 @@ function Navbar() {
               </li>
               <li className='nav-item'>
                 <Link
-                  to='/regulation'
+                  to={`/${leagueId}/regulation`}
                   className='nav-links'
                   onClick={closeMobileMenu}
                 >
@@ -48,7 +46,7 @@ function Navbar() {
               </li>
               <li className='nav-item'>
                 <Link
-                  to='/media'
+                  to={`/${leagueId}/media`}
                   className='nav-links'
                   onClick={closeMobileMenu}
                 >
@@ -57,7 +55,7 @@ function Navbar() {
               </li>
               <li className='nav-item'>
                 <Link
-                  to='/about'
+                  to={`/${leagueId}/about`}
                   className='nav-links'
                   onClick={closeMobileMenu}
                 >

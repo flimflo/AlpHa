@@ -11,9 +11,9 @@ import {
 } from 'react-icons/fa';
 
 // TODO: Cambiar links
-function Footer() {
+function Footer({ color = '#1c2237'}) {
   return (
-    <div className='footer-container'>
+    <div className='footer-container' style={{ backgroundColor: color }}>
       <div className='footer-links'>
         <div className='footer-link-wrapper'>
           <div className='footer-link-items'>

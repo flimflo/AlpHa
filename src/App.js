@@ -1,6 +1,6 @@
 import React from 'react';
 // import './App.css';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import Navbar from './components/navbar/Navbar';
 import SignIn from "./components/pages/auth/SignIn";
 import News from "./components/pages/news/News";
@@ -16,36 +16,62 @@ import { AddRulesToLeague } from './components/pages/add-rules-to-league/AddRule
 import { useCurrentUser } from './components/pages/auth/CurrentUser';
 import { NewsEditor } from './components/pages/news/NewsEditor';
 import { CreateCalendarPage } from './components/admin/CreateCalendarPage';
+import { MediaEditor } from './components/pages/media/MediaEditor';
+import { Button } from 'react-bootstrap';
+import { auth } from 'firebase';
+import { useLeagueData } from './useLeagueData';
 
 // UsuarioTest: alpha@test.com Contraseña: 123456
 function App() {
   const user = useCurrentUser()
-
+  const { leagueId, color, title } = useLeagueData()
+  
   return (
-    <Router>
-      <Navbar />
+    <>
+      {user?.isAdmin ?
+        <h1>TODO: hacer navbar de admin <Button
+        onClick={() => {
+          auth().signOut();
+          window.location.reload();
+        }}
+      >
+        Cerrar sesión
+      </Button></h1>:
+        <Navbar title={title} color={color} leagueId={leagueId} />
+      }
+      
       <Switch>
-        <Route path='/' exact component={Home} />
-        <Route path='/league/:leagueId/news' component={News} />
-        <Route path='/regulation' exact component={Regulation} />
-        <Route path='/media' exact component={Media} />
-        <Route path='/about' exact component={About} />
-        <Route path='/sponsors' exact component={Sponsors} />
-        <Route path='/sign-in' exact component={SignIn} />
-        <Route path='/league/:leagueId/signup' exact component={AddTeamToLeague} />
-        <Route path='/league/:leagueId/addrules' exact component={AddRulesToLeague} />
-        {/* Admin */}
-        {
+      {
+          /* Admin */
           user?.isAdmin &&
           <>
-            <Route path='/admin/news' component={NewsEditor} />
+            <Route path='/admin/addrules' exact component={AddRulesToLeague} />
+            <Route path='/admin/news' exact component={NewsEditor} />
+            <Route path='/admin/media' exact component={MediaEditor} />
+            <Route path='/admin/create-calendar' exact component={CreateCalendarPage} />
+            <Redirect to='/admin/create-calendar' />
+          </>
+        }
+        {/* Pantallas que ven los usuarios normales */}
+        <Route path='/:leagueId' exact component={Home} />
+        <Route path='/:leagueId/news' component={News} />
+        <Route path='/:leagueId/regulation' exact component={Regulation} />
+        <Route path='/:leagueId//media' exact component={Media} />
+        <Route path='/:leagueId/about' exact component={About} />
+        <Route path='/:leagueId/sponsors' exact component={Sponsors} />
+        {
+          /**
+            * Aqui ya tienen sesion iniciada pero tecnicamente no son admins por que apenas 
+            * van a crear su liga o por que van a inscribir a su equipo
+            */
+          user && <>  
             <Route path='/create-league' exact component={CreateLeaguePage} />
-            <Route path='/create-calendar' exact component={CreateCalendarPage} />
+            <Route path='/:leagueId/signup' exact component={AddTeamToLeague} />
           </>
         }
       </Switch>
-      <Footer />
-    </Router>
+      {!user?.isAdmin && <Footer color={color} />}
+    </>
   )
 }
 
