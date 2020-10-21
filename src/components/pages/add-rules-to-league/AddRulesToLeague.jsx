@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react"
 import { useDocumentDataOnce } from "react-firebase-hooks/firestore"
 import { Alert, Container, Col, Row, Form, Button} from "react-bootstrap"
 import { useForm, useFieldArray } from "react-hook-form"  
-import { useParams } from "react-router-dom"
 import { LeaguesCollection, RulesCollection } from "../../../firestoreCollections"
+import { useCurrentUser } from "../auth/CurrentUser"
 
 
 export function AddRulesToLeague() {
-    const {leagueId} = useParams()
-    const [value, loading, error] = useDocumentDataOnce(LeaguesCollection.doc(leagueId))
+    const user = useCurrentUser()
+    const [value, loading, error] = useDocumentDataOnce(LeaguesCollection.doc(user?.leagueId))
     const leagueWasNotFound = !loading && value === undefined
     const { register, handleSubmit, control, errors } = useForm()
     const { fields, append } = useFieldArray({
@@ -18,12 +18,11 @@ export function AddRulesToLeague() {
     const [success, setSuccess] = useState(false)
     let [rules, setRules] = useState([])
     let [rulesDoc, setRulesDoc] = useState([])
-    let [teamPlayers, setTeamPlayers] = useState([])
     
     async function addRules({rules = []}) {
         console.log("addrulessss")
         await RulesCollection.add({ 
-            leagueId: leagueId,
+            leagueId: user?.leagueId,
             rules
         })
         setSuccess(true)
@@ -32,7 +31,7 @@ export function AddRulesToLeague() {
     async function getRules() {
         let rulesList = []
         let docsList = []
-        await RulesCollection.where("leagueId", "==", leagueId)
+        await RulesCollection.where("leagueId", "==", user?.leagueId)
         .get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
                  for (let i = 0; i < doc.data().rules.length; i++) {
@@ -51,7 +50,7 @@ export function AddRulesToLeague() {
         if(doc != undefined) {
             await RulesCollection.doc(doc.id)
             .update({
-                leagueId: leagueId,
+                leagueId: user?.leagueId,
                 rules: rules
             })
             .catch(function(error) {
