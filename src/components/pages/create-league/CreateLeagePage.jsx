@@ -5,7 +5,6 @@ import { auth } from 'firebase'
 import { LeaguesCollection, SponsorsCollection, VenueCollection } from '../../../firestoreCollections'
 
 function formIsValid(errors) {
-  console.log(errors)
   return Object.entries(errors).length === 0
 }
 

@@ -52,7 +52,6 @@ export function AddTeamToLeague() {
                     // The document probably doesn't exist.
                     console.error("Error updating document: ", error);
                 });
-            console.log('updated');
             setSuccess(true)
         }
     }

@@ -7,7 +7,6 @@ import { useCurrentUser } from '../pages/auth/CurrentUser';
 // import { CalendarsCollection } from '../../../firestoreCollections'
 
 function formIsValid(errors) {
-  console.log(errors)
   return Object.entries(errors).length === 0
 }
 
@@ -21,7 +20,12 @@ export function CreateCalendarPage() {
   const [success, setSuccess] = useState(false);
   const [updateMode, setUpdateMode] = useState(false);
   const [rolesList, setRolesList] = useState([]);
+  
   async function getRoles() {
+    if (!user?.leagueId) { 
+      return 
+    }
+
     let rolesList = []
     let document = {}
     setLoading(true)
@@ -38,7 +42,7 @@ export function CreateCalendarPage() {
     setLoading(false)
   }
 
-  useEffect(() => { getRoles() }, [])
+  useEffect(() => { getRoles() }, [user?.leagueId])
 
   function addRow(vals) {
     const parsedDate = new Date(vals.fecha)

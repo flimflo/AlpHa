@@ -20,7 +20,6 @@ export function AddRulesToLeague() {
     let [rulesDoc, setRulesDoc] = useState([])
     
     async function addRules({rules = []}) {
-        console.log("addrulessss")
         await RulesCollection.add({ 
             leagueId: user?.leagueId,
             rules

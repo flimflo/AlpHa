@@ -20,7 +20,6 @@ function Regulation() {
         })
     })
     setRules(rulesList)
-    console.log(rulesList)
 }
 
 useEffect(() => {

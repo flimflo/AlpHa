@@ -2,33 +2,33 @@ import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { FaAutoprefixer, FaBars, FaTimes } from 'react-icons/fa';
 import { IconContext } from 'react-icons/lib';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { auth } from '../../firebase';
 import { useCurrentUser } from "../pages/auth/CurrentUser";
 import './Navbar.css';
 
-function Navbar({ leagueId = '', title = 'AlpHa', color = '#1c2237'}) {
-  const currentUser = useCurrentUser()  
+function Navbar() {
+  const leagueId = useCurrentUser()?.leagueId
   const [click, setClick] = useState(false);
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
 
   return (
     <>
-      <IconContext.Provider value={{ color: '#fff' }}>
-        <nav className='navbar' style={{ backgroundColor: color }}>
+      <IconContext.Provider value={{ color: '#BABABA' }}>
+        <nav className='navbar'>
           <div className='navbar-container container'>
-            <Link                   to={`/${leagueId}`} className='navbar-logo' onClick={closeMobileMenu}>
+            <Link className='navbar-logo' onClick={closeMobileMenu}>
               <FaAutoprefixer className='navbar-icon' />
-              {title || 'AlpHa'}
+              Admin
             </Link>
             <div className='menu-icon' onClick={handleClick}>
               {click ? <FaTimes /> : <FaBars />}
             </div>
-            <ul style={{ backgroundColor: color }} className={click ? 'nav-menu active' : 'nav-menu'}>
+            <ul className={click ? 'nav-menu active' : 'nav-menu'}>
               <li className='nav-item'>
                 <Link
-                  to={`/${leagueId}/news`}
+                  to='/admin/news'
                   className='nav-links'
                   onClick={closeMobileMenu}
                 >
@@ -37,16 +37,16 @@ function Navbar({ leagueId = '', title = 'AlpHa', color = '#1c2237'}) {
               </li>
               <li className='nav-item'>
                 <Link
-                  to={`/${leagueId}/regulation`}
+                  to='/admin/regulation'
                   className='nav-links'
                   onClick={closeMobileMenu}
                 >
-                  Reglamento
+                  Editar Reglamento
                 </Link>
               </li>
               <li className='nav-item'>
                 <Link
-                  to={`/${leagueId}/media`}
+                  to='/admin/media'
                   className='nav-links'
                   onClick={closeMobileMenu}
                 >
@@ -55,33 +55,30 @@ function Navbar({ leagueId = '', title = 'AlpHa', color = '#1c2237'}) {
               </li>
               <li className='nav-item'>
                 <Link
-                  to={`/${leagueId}/about`}
+                  to='/admin/create-calendar'
                   className='nav-links'
                   onClick={closeMobileMenu}
                 >
-                  Sobre Nosotros
+                  Roles
                 </Link>
               </li>
               <li className='nav-item'>
                 <Link
-                  to='/sponsors'
+                 
                   className='nav-links'
-                  onClick={closeMobileMenu}
+                  onClick={() => { 
+                    closeMobileMenu()
+                    auth.signOut()
+                    window.location.replace(`/${leagueId}`)
+                }}
                 >
-                  Patrocinadores
-                </Link>
+                    <Button
+                      variant="outline-light"
+                    >
+                      Cerrar sesión
+                    </Button>
+                    </Link>
               </li>
-              {currentUser &&
-              <li className='nav-item'>
-                <Link
-                  to={`/league/${currentUser.leagueId}/signup`}
-                  className='nav-links'
-                  onClick={closeMobileMenu}
-                >
-                  Mi Equipo
-                </Link>
-              </li>
-              }            
             </ul>
           </div>
         </nav>
