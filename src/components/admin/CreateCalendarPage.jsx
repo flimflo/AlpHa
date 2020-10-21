@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Container, Row, Col, Form, Button, Alert, Table, Card } from 'react-bootstrap'
+import { useDocumentDataOnce } from 'react-firebase-hooks/firestore';
 import { useForm } from 'react-hook-form'
-import { auth } from 'firebase'
 import { RolesCollections } from '../../firestoreCollections';
 import { useCurrentUser } from '../pages/auth/CurrentUser';
 // import { CalendarsCollection } from '../../../firestoreCollections'
@@ -16,31 +16,57 @@ function formIsValid(errors) {
 export function CreateCalendarPage() {
   const user = useCurrentUser()
   const { register, handleSubmit, errors } = useForm()
-  const [, setLoading] = useState(false);
-  const [success] = useState(false)
+  const [document, setDocument] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [updateMode, setUpdateMode] = useState(false);
   const [rolesList, setRolesList] = useState([]);
   async function getRoles() {
     let rolesList = []
+    let document = {}
     setLoading(true)
-    await RolesCollections.where("leagueId", "==", user?.leagueId)
+    await RolesCollections.where("leagueId", "==", user.leagueId)
       .get().then((querySnapshot) => {
-        rolesList = (querySnapshot.data() && querySnapshot.data().roles)
+        querySnapshot.forEach((doc) => {
+          rolesList = (doc.data() && doc.data().roles)
+          document = doc;
+        })
       }).catch((err) => console.error(err))
-    setLoading(false)
+    if (rolesList.length > 0) setUpdateMode(true)
     setRolesList(rolesList)
+    setDocument(document)
+    setLoading(false)
   }
 
   useEffect(() => { getRoles() }, [])
-  useEffect(() => { console.log('roles', rolesList) }, [rolesList])
 
   function addRow(vals) {
     const parsedDate = new Date(vals.fecha)
     parsedDate.setHours(parseInt(vals.hora.slice(0, 2)), parseInt(vals.hora.slice(3, 5)))
-    console.log(parsedDate.toLocaleTimeString())
-    rolesList.push({ ...vals, hora: parsedDate });
+    rolesList.push({ ...vals, hora: String(parsedDate.toLocaleTimeString()) });
   }
-  function uploadCalendar() {
-    console.log('uploading...')
+  async function updateCalendar() {
+    if (document.id) {
+      await RolesCollections.doc(document.id)
+        .update({
+          roles: rolesList
+        })
+        .then((res) => setSuccess(true))
+        .catch(function (error) {
+          // The document probably doesn't exist.
+          console.error("Error updating document: ", error);
+        });
+    }
+  }
+  async function uploadCalendar() {
+    await RolesCollections.add({
+      roles: rolesList,
+      leagueId: user.leagueId,
+    }).then((res) => {
+      setSuccess(true);
+    }).catch((err) => {
+      console.error(err)
+    })
   }
   return (
     <Container fluid md={12}>
@@ -48,6 +74,7 @@ export function CreateCalendarPage() {
         <Col>
           <Form onSubmit={handleSubmit(vals => addRow(vals))}>
             <Card className="table-responsive">
+              {loading && <span>Collection: Loading...</span>}
               {rolesList && (
                 <Table responsive>
                   <thead className="thead-dark">
@@ -64,7 +91,7 @@ export function CreateCalendarPage() {
                         <td>{rol.equipoA}</td>
                         <td>{rol.equipoB}</td>
                         <td>{rol.cancha}</td>
-                        <td>{rol.hora.toLocaleTimeString()}</td>
+                        <td>{String(rol.hora)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -85,7 +112,10 @@ export function CreateCalendarPage() {
             </Form.Group>
             <Button variant="secondary" type="submit" disabled={!formIsValid(errors)}>Agregar Rol</Button>
             <hr />
-            <Button variant="primary" onClick={uploadCalendar}>Guardar</Button>
+            {updateMode ?
+              <Button variant="primary" onClick={updateCalendar}>Actualizar</Button>
+              :
+              <Button variant="primary" onClick={uploadCalendar}>Guardar</Button>}
             <hr />
             {success && <Alert variant="success">Equipo actualizado con éxito</Alert>}
           </Form>
