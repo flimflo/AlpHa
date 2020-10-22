@@ -11,8 +11,6 @@ function formIsValid(errors) {
   return Object.entries(errors).length === 0
 }
 
-
-
 export function ResultCalendarPage() {
   const user = useCurrentUser()
   const { register, handleSubmit, errors } = useForm()
@@ -22,23 +20,22 @@ export function ResultCalendarPage() {
   //const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [updateMode, setUpdateMode] = useState(false);
-  //const [rolesList, setRolesList] = useState([]);
+  const [rolesList, setRolesList] = useState([]);
+  let role = data?.[0]?.roles
 
-  const role = data?.[0]?.roles
-
-  async function updateCalendar() {
-    if (document.id) {
-      await RolesCollections.doc(document.id)
-        .update({
-          roles: rolesList
-        })
-        .then((res) => setSuccess(true))
-        .catch(function (error) {
-          // The document probably doesn't exist.
-          console.error("Error updating document: ", error);
-        });
-    }
+  async function updateResults(rolesList) {
+    await RolesCollections.doc(data?.[0]?.id)
+      .update({
+        roles: rolesList
+      })
+      .then((res) => setSuccess(true))
+      .catch(function (error) {
+        // The document probably doesn't exist.
+        console.error("Error updating document: ", error);
+      });
   }
+
+
   async function uploadCalendar() {
     await RolesCollections.add({
       roles: rolesList,
@@ -49,6 +46,22 @@ export function ResultCalendarPage() {
       console.error(err)
     })
   }
+
+  /*async function updateTeamPlayers(vals) {
+    const team = teams.find(team => team.teamName === teamSelected)
+    if (team?.id) {
+        await TeamsCollection.doc(team.id)
+            .update({
+                players: vals.players
+            })
+            .catch(function (error) {
+                // The document probably doesn't exist.
+                console.error("Error updating document: ", error);
+            });
+        setSuccess(true)
+    }
+  }*/
+
   /*
   <Form.Group>
               <Form.Label>Equipo A</Form.Label>
@@ -71,12 +84,16 @@ export function ResultCalendarPage() {
             <hr />
             {success && <Alert variant="success">Equipo actualizado con éxito</Alert>}
   */
+
+ async function addRow(vals) {
+  console.log("Ya se armo")
+}
   
   return (
     <Container fluid md={12}>
       <Row>
         <Col md={12}>
-          <Form onSubmit={handleSubmit(vals => addRow(vals))}>
+          <Form /*onSubmit={handleSubmit(vals => updateResults(vals))}*/>
             <Card className="table-responsive">
               {loading && <span>Collection: Loading...</span>}
               {rolesList && (
@@ -97,20 +114,19 @@ export function ResultCalendarPage() {
                     {role?.map((rol, index) => (
                       <tr className="tablerow" key={index}>
                         <td>{rol.equipoA}</td>
-                        <td><Form.Control type= "number" placeholder="Goles A" name="golA" ref={register({ required: true })} /></td>
+                        <td><Form.Control type="number" placeholder="Goles A" name="golA" ref={register({ required: true })} /></td>
                         <td></td>
-                        <td><Form.Control type= "number" placeholder="Goles B" name="golB" ref={register({ required: true })} /></td>
+                        <td><Form.Control type="number" placeholder="Goles B" name="golB" ref={register({ required: true })} /></td>
                         <td>{rol.equipoB}</td>
                         <td>{rol.cancha}</td>
                         <td>{String(rol.hora)}</td>
-                        <td><Button variant="primary" onClick={uploadCalendar}>Guardar</Button></td>
+                        <td><Button variant="primary" onClick={updateResults(index)}>Guardar</Button></td>
                       </tr>
                     ))}
                   </tbody>
                 </Table>
               )}
             </Card>
-            
           </Form>
         </Col>
       </Row>
