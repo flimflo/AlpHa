@@ -20,19 +20,23 @@ export function TopListAdmin() {
 
     const unsubscribe = LeagueInfoCollection.doc(user?.leagueId)
       .onSnapshot(s => {
-        const { a, b, c, d } = s.data().highlights
-        Promise.all([a, b, c, d].map(async d => ({
-          url: await getStoragePath(d.picture),
-          title: d.title,
-          subtitle: d.subtitle
-        })))
-          .then(setData)
+        try {
+        
+          const { a, b, c, d } = s.data().highlights
+          Promise.all([a, b, c, d].map(async d => ({
+            url: await getStoragePath(d.picture),
+            title: d.title,
+            subtitle: d.subtitle
+          })))
+            .then(setData)
+        } catch {
+          
+        }
       })
 
     return unsubscribe
   }, [user?.leagueId])
 
-  console.log(data)
   async function updateTopList({  a, b, c, d }, leagueId) {
     await uploadFile(a.picture[0], `/${leagueId}/top-a`)
     await uploadFile(b.picture[0], `/${leagueId}/top-b`)
