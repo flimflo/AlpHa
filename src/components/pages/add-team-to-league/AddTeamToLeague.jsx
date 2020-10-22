@@ -4,6 +4,8 @@ import { Alert, Container, Col, Row, Form, Button } from "react-bootstrap"
 import { useForm, useFieldArray } from "react-hook-form"
 import { useParams } from "react-router-dom"
 import { LeaguesCollection, TeamsCollection } from "../../../firestoreCollections"
+import { uploadFile } from "../../../firebaseStorage"
+import { firestore } from "firebase"
 
 
 export function AddTeamToLeague() {
@@ -25,7 +27,12 @@ export function AddTeamToLeague() {
         await TeamsCollection.add({
             leagueId: leagueId,
             teamName: teamName,
-            players,
+            players: await Promise.all(players.map(async p => {
+                const timestamp = firestore.Timestamp.now().toMillis()
+                const path = `/${leagueId}/${timestamp}${p.picture[0].name}`
+                await uploadFile(p.picture[0], path)
+                return { ...p, picture: path }
+            })),
         })
         setSuccess(true)
     }
@@ -107,7 +114,14 @@ export function AddTeamToLeague() {
                                 <Form.Label>Numero del Jugador #{index + 1}</Form.Label>
                                 <Form.Control type="number" placeholder="Ej. 3" name={`players[${index}].number`} ref={register({ required: true })} />
                                 <Form.Label>Foto del Jugador #{index + 1}</Form.Label>
-                                <Form.Control className="mb-5" placeholder="Ej. poner url" name={`players[${index}].photoUrl`} ref={register({ required: true })} />
+                                <Form.File
+                                    ref={register({ required: true })}
+                                    leagueId={`players[${index}].picture`}
+                                    multiple={false}
+                                    accept=".jpeg,.jpg,.png"
+                                    name={`players[${index}].picture`}
+                                    data-browse="Subir"
+                                />
                             </Form.Group>
                         ))}
                         <Button variant="secondary" onClick={append}>Agregar jugador</Button>
