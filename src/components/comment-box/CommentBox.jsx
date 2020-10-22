@@ -27,26 +27,32 @@ function CommentBox({ objectRelationId: relationId }) {
   const [commentsList, setCommentsList] = useState([]);
 
   async function postComment({ comment }) {
-    const id = updateMode ? document.id : await postCommentsBoxInstance().id;
+    let id = ''
+    if (updateMode) {
+      id = document.id
+    } else {
+      id = await postCommentsBoxInstance();
+    }
     const newComments = [...commentsList, { content: comment, publishedAt: new Date() }];
     await CommentsCollection.doc(id).update({
       comments: newComments,
     })
   }
   async function postCommentsBoxInstance() {
-    await CommentsCollection.add({
+    const res = await CommentsCollection.add({
       comments: [],
       relationId,
     }).then((res) => {
       setSuccess(true)
-      return res;
+      if (res) return res.id;
     }).catch(err => {
       console.error(err)
     })
+    return res;
   }
   async function getComments() {
     if (!relationId) {
-      return
+      return () => {}
     }
 
     let commentsList = []
