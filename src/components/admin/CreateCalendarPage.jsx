@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { RolesCollections } from '../../firestoreCollections';
 import { useCurrentUser } from '../pages/auth/CurrentUser';
 // import { CalendarsCollection } from '../../../firestoreCollections'
-
+// hola
 function formIsValid(errors) {
   return Object.entries(errors).length === 0
 }
