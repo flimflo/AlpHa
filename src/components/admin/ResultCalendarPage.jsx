@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Container, Row, Col, Form, Button, Alert, Table, Card } from 'react-bootstrap'
 import { useDocumentDataOnce } from 'react-firebase-hooks/firestore';
+import { useCollectionData } from 'react-firebase-hooks/firestore'
 import { useForm } from 'react-hook-form'
 import { RolesCollections } from '../../firestoreCollections';
 import { useCurrentUser } from '../pages/auth/CurrentUser';
@@ -12,43 +13,19 @@ function formIsValid(errors) {
 
 
 
-export function CreateCalendarPage() {
+export function ResultCalendarPage() {
   const user = useCurrentUser()
   const { register, handleSubmit, errors } = useForm()
-  const [document, setDocument] = useState({});
-  const [loading, setLoading] = useState(false);
+  const [data, loading, error] = useCollectionData(
+    RolesCollections.where('leagueId', '==', user?.leagueId), { idField: "matchId" })
+  //const [document, setDocument] = useState({});
+  //const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [updateMode, setUpdateMode] = useState(false);
-  const [rolesList, setRolesList] = useState([]);
-  
-  async function getRoles() {
-    if (!user?.leagueId) { 
-      return 
-    }
+  //const [rolesList, setRolesList] = useState([]);
 
-    let rolesList = []
-    let document = {}
-    setLoading(true)
-    await RolesCollections.where("leagueId", "==", user.leagueId)
-      .get().then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          rolesList = (doc.data() && doc.data().roles)
-          document = doc;
-        })
-      }).catch((err) => console.error(err))
-    if (rolesList.length > 0) setUpdateMode(true)
-    setRolesList(rolesList)
-    setDocument(document)
-    setLoading(false)
-  }
+  const role = data?.[0]?.roles
 
-  useEffect(() => { getRoles() }, [user?.leagueId])
-
-  function addRow(vals) {
-    const parsedDate = new Date(vals.fecha)
-    parsedDate.setHours(parseInt(vals.hora.slice(0, 2)), parseInt(vals.hora.slice(3, 5)))
-    rolesList.push({ ...vals, hora: String(parsedDate.toLocaleTimeString()) });
-  }
   async function updateCalendar() {
     if (document.id) {
       await RolesCollections.doc(document.id)
@@ -72,37 +49,8 @@ export function CreateCalendarPage() {
       console.error(err)
     })
   }
-  return (
-    <Container fluid md={12}>
-      <Row>
-        <Col>
-          <Form onSubmit={handleSubmit(vals => addRow(vals))}>
-            <Card className="table-responsive">
-              {loading && <span>Collection: Loading...</span>}
-              {rolesList && (
-                <Table responsive>
-                  <thead className="thead-dark">
-                    <tr>
-                      <th scope="col">Equipo A</th>
-                      <th scope="col">Equipo B</th>
-                      <th scope="col">Cancha</th>
-                      <th scope="col">Hora</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {rolesList?.map((rol, index) => (
-                      <tr className="tablerow" key={index}>
-                        <td>{rol.equipoA}</td>
-                        <td>{rol.equipoB}</td>
-                        <td>{rol.cancha}</td>
-                        <td>{String(rol.hora)}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
-              )}
-            </Card>
-            <Form.Group>
+  /*
+  <Form.Group>
               <Form.Label>Equipo A</Form.Label>
               <Form.Control placeholder="Ej. Valax" name="equipoA" ref={register({ required: true })} />
               <Form.Label>Equipo B</Form.Label>
@@ -122,6 +70,47 @@ export function CreateCalendarPage() {
               <Button variant="primary" onClick={uploadCalendar}>Guardar</Button>}
             <hr />
             {success && <Alert variant="success">Equipo actualizado con éxito</Alert>}
+  */
+  
+  return (
+    <Container fluid md={12}>
+      <Row>
+        <Col md={12}>
+          <Form onSubmit={handleSubmit(vals => addRow(vals))}>
+            <Card className="table-responsive">
+              {loading && <span>Collection: Loading...</span>}
+              {rolesList && (
+                <Table responsive>
+                  <thead className="thead-dark">
+                    <tr>
+                      <th scope="col">Equipo A</th>
+                      <th scope="col">Goles A</th>
+                      <th scope="col">--</th>
+                      <th scope="col">Goles B</th>
+                      <th scope="col">Equipo B</th>
+                      <th scope="col">Cancha</th>
+                      <th scope="col">Hora</th>
+                      <th scope="col">Guardar</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {role?.map((rol, index) => (
+                      <tr className="tablerow" key={index}>
+                        <td>{rol.equipoA}</td>
+                        <td><Form.Control type= "number" placeholder="Goles A" name="golA" ref={register({ required: true })} /></td>
+                        <td></td>
+                        <td><Form.Control type= "number" placeholder="Goles B" name="golB" ref={register({ required: true })} /></td>
+                        <td>{rol.equipoB}</td>
+                        <td>{rol.cancha}</td>
+                        <td>{String(rol.hora)}</td>
+                        <td><Button variant="primary" onClick={uploadCalendar}>Guardar</Button></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              )}
+            </Card>
+            
           </Form>
         </Col>
       </Row>
