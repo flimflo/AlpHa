@@ -13,13 +13,17 @@ function TopList() {
   useEffect(() => {
     const unsubscribe = LeagueInfoCollection.doc(leagueId)
       .onSnapshot(s => {
-        const { a, b, c, d } = s.data().highlights
-        Promise.all([a, b, c, d].map(async d => ({
-          url: await getStoragePath(d.picture),
-          title: d.title,
-          subtitle: d.subtitle
-        })))
-          .then(setData)
+        try {
+          const { a, b, c, d } = {} = s.data().highlights
+          Promise.all([a, b, c, d].map(async d => ({
+            url: await getStoragePath(d.picture),
+            title: d.title,
+            subtitle: d.subtitle
+          })))
+            .then(setData)
+        } catch (_) {
+        }
+        
       })
 
     return unsubscribe

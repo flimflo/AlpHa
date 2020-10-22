@@ -24,6 +24,7 @@ function Sponsors() {
 
   return(
     <>
+      <h1>Nuestros Patrocinadores</h1>
       {data.map(d => (
         <Card style={{ width: '18rem' }} className="m-4" key={d.name}>
         {d.pictureUrl && <Card.Img variant="top" src={d.pictureUrl} />}
