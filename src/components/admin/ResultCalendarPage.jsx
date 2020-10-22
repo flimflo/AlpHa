@@ -30,10 +30,12 @@ export function ResultCalendarPage() {
   }
 
   async function appendResult(index, golA, golB) {
-    let rolesList = role
-    rolesList[index].golesA = golA
-    rolesList[index].golesB = golB
-    updateResults(rolesList)
+    if (golA != "" && golB != "") {
+      let rolesList = role
+      rolesList[index].golesA = golA
+      rolesList[index].golesB = golB
+      updateResults(rolesList)
+    }
   }
 
   return (
