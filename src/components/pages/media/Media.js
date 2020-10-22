@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card } from "react-bootstrap";
+import { Card, Col } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { getStoragePath } from "../../../firebaseStorage";
 import { MediaCollection } from "../../../firestoreCollections";
@@ -26,20 +26,22 @@ function Media() {
 
   return (
     <>
-      <div className="section">
-      <h1>Multimedia</h1>
-        <div className="section-content media-table">
-          {data.map(d => (
-            <Card style={{ width: '18rem' }} className="m-4">
-              {d.pictureUrl && <Card.Img variant="top" src={d.pictureUrl} />}
-              <Card.Body>
-                <Card.Title>{d.title}</Card.Title>
-                <Card.Subtitle className="mb-2 text-muted" >{d.date}</Card.Subtitle>
-              </Card.Body>
-            </Card>
-          ))}
+      <Col md={12}>
+        <div className="section">
+          <div className="section-content media-table">
+            <h1>Multimedia</h1>
+            {data.map(d => (
+              <Card style={{ width: '18rem' }} className="m-4">
+                {d.pictureUrl && <Card.Img variant="top" src={d.pictureUrl} />}
+                <Card.Body>
+                  <Card.Title>{d.title}</Card.Title>
+                  <Card.Subtitle className="mb-2 text-muted" >{d.date}</Card.Subtitle>
+                </Card.Body>
+              </Card>
+            ))}
+          </div>
         </div>
-      </div>
+      </Col>
     </>
   )
 }
