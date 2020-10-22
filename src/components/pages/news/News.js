@@ -3,6 +3,7 @@ import { Card } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { getStoragePath } from "../../../firebaseStorage";
 import { NewsCollection } from "../../../firestoreCollections";
+import CommentBox from "../../comment-box/CommentBox";
 
 function News() {
   const { leagueId } = useParams() 
@@ -16,6 +17,7 @@ function News() {
           ...d.data(),
           pictureUrl: d.data().picture && await getStoragePath(d.data().picture),
           date: new Date(d.data().date.toMillis()).toLocaleDateString(),
+          id: d.id,
         })))
           .then(setData)
       })
@@ -33,6 +35,7 @@ function News() {
           <Card.Title>{d.title}</Card.Title>
           <Card.Subtitle className="mb-2 text-muted" >{d.date}</Card.Subtitle>
           <Card.Text className="mb-2 text-muted" >{d.content}</Card.Text>
+          <CommentBox objectRelationId={d.id} />
         </Card.Body>
       </Card>
       ))}
