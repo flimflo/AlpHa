@@ -27,9 +27,9 @@ function Media() {
   return (
     <>
       <Col md={12}>
+        <h1 className="Title">Multimedia</h1>
         <div className="section">
           <div className="section-content media-table">
-            <h1>Multimedia</h1>
             {data.map(d => (
               <Card style={{ width: '18rem' }} className="m-4">
                 {d.pictureUrl && <Card.Img variant="top" src={d.pictureUrl} />}

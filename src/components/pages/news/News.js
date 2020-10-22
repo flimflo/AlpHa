@@ -27,24 +27,26 @@ function News() {
   }, [leagueId])
 
   return (
-    <div className="section">
-      <div className="section-content news-table">
-        <Col md={12}>
-          <h1>Noticias de la liga:</h1>
-          {data.map(d => (
-            <Card key={d.date} style={{ width: '90%' }} className="m-4">
-              {d.pictureUrl && <Card.Img variant="top" src={d.pictureUrl} />}
-              <Card.Body>
-                <Card.Title>{d.title}</Card.Title>
-                <Card.Subtitle className="mb-2 text-muted" >{d.date}</Card.Subtitle>
-                <Card.Text className="mb-2 text-muted" >{d.content}</Card.Text>
-                <CommentBox objectRelationId={d.id} />
-              </Card.Body>
-            </Card>
-          ))}
-        </Col>
+    <>
+      <h1 className="Title">Noticias de la liga:</h1>
+      <div className="section">
+        <div className="section-content news-table">
+          <Col md={12}>
+            {data.map(d => (
+              <Card key={d.date} style={{ width: '90%' }} className="m-4">
+                {d.pictureUrl && <Card.Img variant="top" src={d.pictureUrl} />}
+                <Card.Body>
+                  <Card.Title>{d.title}</Card.Title>
+                  <Card.Subtitle className="mb-2 text-muted" >{d.date}</Card.Subtitle>
+                  <Card.Text className="mb-2 text-muted" >{d.content}</Card.Text>
+                  <CommentBox objectRelationId={d.id} />
+                </Card.Body>
+              </Card>
+            ))}
+          </Col>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 
