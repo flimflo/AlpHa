@@ -69,6 +69,21 @@ export function CreateLeaguePage() {
             </Form.Group>
             <hr />
 
+            <h3>Acerca de la liga</h3>
+            <Form.Group>
+              <Form.Label>Misión</Form.Label>
+              <Form.Control placeholder="Ej. La misión de tu liga" name="info.mission" as="textarea" ref={register({ required: true })} />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Visión</Form.Label>
+              <Form.Control placeholder="Ej. La visión de tu liga" name="info.vision" as="textarea" ref={register({ required: true })} />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Historia</Form.Label>
+              <Form.Control placeholder="Ej. La historia de tu liga" name="info.history" as="textarea" ref={register({ required: true })} />
+            </Form.Group>
+            <hr />
+
             <h3>Redes y contacto</h3>
             <Form.Group>
               <Form.Label>Twitter</Form.Label>
