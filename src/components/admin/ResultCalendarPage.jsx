@@ -21,10 +21,11 @@ export function ResultCalendarPage() {
   const [success, setSuccess] = useState(false);
   const [updateMode, setUpdateMode] = useState(false);
   const [rolesList, setRolesList] = useState([]);
-  let role = data?.[0]?.roles
+
+  const role = data?.[0]?.roles
 
   async function updateResults(rolesList) {
-    await RolesCollections.doc(data?.[0]?.id)
+    await RolesCollections.doc(data?.[0]?.matchId)
       .update({
         roles: rolesList
       })
@@ -34,8 +35,6 @@ export function ResultCalendarPage() {
         console.error("Error updating document: ", error);
       });
   }
-
-
   async function uploadCalendar() {
     await RolesCollections.add({
       roles: rolesList,
@@ -85,15 +84,11 @@ export function ResultCalendarPage() {
             {success && <Alert variant="success">Equipo actualizado con éxito</Alert>}
   */
 
- async function addRow(vals) {
-  console.log("Ya se armo")
-}
-  
   return (
     <Container fluid md={12}>
       <Row>
         <Col md={12}>
-          <Form /*onSubmit={handleSubmit(vals => updateResults(vals))}*/>
+          <Form>
             <Card className="table-responsive">
               {loading && <span>Collection: Loading...</span>}
               {rolesList && (
@@ -114,13 +109,13 @@ export function ResultCalendarPage() {
                     {role?.map((rol, index) => (
                       <tr className="tablerow" key={index}>
                         <td>{rol.equipoA}</td>
-                        <td><Form.Control type="number" placeholder="Goles A" name="golA" ref={register({ required: true })} /></td>
+                        <td><Form.Control type="number" value={rol.golesA} placeholder="Goles A" name="golA" ref={register({ required: true })} /></td>
                         <td></td>
-                        <td><Form.Control type="number" placeholder="Goles B" name="golB" ref={register({ required: true })} /></td>
+                        <td><Form.Control type="number" value={rol.golesB} placeholder="Goles B" name="golB" ref={register({ required: true })} /></td>
                         <td>{rol.equipoB}</td>
                         <td>{rol.cancha}</td>
                         <td>{String(rol.hora)}</td>
-                        <td><Button variant="primary" onClick={updateResults(index)}>Guardar</Button></td>
+                        <td><Button disabled={rol.golesA != undefined && rol.golesB != undefined} variant="primary" onClick={() => updateResults}>Guardar</Button></td>
                       </tr>
                     ))}
                   </tbody>
