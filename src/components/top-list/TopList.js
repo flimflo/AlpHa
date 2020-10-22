@@ -1,35 +1,43 @@
-import React from "react";
+import React, { useEffect, useState } from 'react'
 import CardDeck from 'react-bootstrap/CardDeck'
 import Card from "react-bootstrap/Card";
-import {useDocument} from "react-firebase-hooks/firestore";
-import firebase from "firebase";
+import {useDocumentData} from "react-firebase-hooks/firestore";
+import { LeagueInfoCollection } from "../../firestoreCollections";
+import { useParams } from "react-router-dom";
+import { getStoragePath } from "../../firebaseStorage";
 
 function TopList() {
+  const {leagueId} = useParams()
+  const [data, setData] = useState([])
+  
+  useEffect(() => {
+    const unsubscribe = LeagueInfoCollection.doc(leagueId)
+      .onSnapshot(s => {
+        const { a, b, c, d } = s.data().highlights
+        Promise.all([a, b, c, d].map(async d => ({
+          url: await getStoragePath(d.picture),
+          title: d.title,
+          subtitle: d.subtitle
+        })))
+          .then(setData)
+      })
 
-  const [value, loading, error] = useDocument(
-    firebase.firestore().doc('top-list/HE7BWbzOPpkKCpJKo9oX'),
-    {
-      snapshotListenOptions: { includeMetadataChanges: false },
-    }
-  );
+    return unsubscribe
+  }, [leagueId])
 
   return(
     <>
-      {error && <strong>Error: {JSON.stringify(error)}</strong>}
-      {loading && <span>Collection: Loading...</span>}
-      {value && (
-        <CardDeck>
-          {value.data().cards.map((card, index) =>
-            <Card key={index} style={{ width: '18rem' }}>
-              <Card.Img variant="top" src={card.image_url} />
-              <Card.Body>
-                <Card.Title>{card.title}</Card.Title>
-                <Card.Text>{card.text}</Card.Text>
-              </Card.Body>
-            </Card>
-          )}
-        </CardDeck>
-      )}
+      <CardDeck>
+        {data.map((d, index) => 
+          <Card key={index} style={{ width: '18rem' }}>
+            <Card.Img variant="top" src={d.url} />
+            <Card.Body>
+              <Card.Title>{d.title}</Card.Title>
+              <Card.Text>{d.subtitle}</Card.Text>
+            </Card.Body>
+          </Card>
+        )}
+      </CardDeck>
     </>
   );
 }
