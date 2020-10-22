@@ -21,6 +21,7 @@ import { MediaEditor } from './components/pages/media/MediaEditor';
 
 import { useLeagueData } from './useLeagueData';
 import { Alert } from 'react-bootstrap';
+import { TopListAdmin } from './components/top-list/TopListAdmin';
 
 
 const copyLeagueToClipboard = (leagueId) => () => {
@@ -55,6 +56,7 @@ function App() {
               <Route path='/admin/news' component={NewsEditor} />
               <Route path='/admin/media' component={MediaEditor} />
               <Route path='/admin/create-calendar' component={CreateCalendarPage} />
+              <Route path='/admin/top-list' component={TopListAdmin} />
               <Redirect to='/admin/create-calendar' />
             </Switch>
           </>
