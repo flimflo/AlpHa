@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react'
 import { Container, Row, Col, Form, Button } from 'react-bootstrap'
 import { useForm, useFieldArray } from 'react-hook-form'
-import { auth } from 'firebase'
+import { auth, firestore } from 'firebase'
 import { LeagueInfoCollection, LeaguesCollection, SponsorsCollection, UserClaimsCollection, VenueCollection } from '../../../firestoreCollections'
+import { uploadFile } from '../../../firebaseStorage'
 
 function formIsValid(errors) {
   return Object.entries(errors).length === 0
@@ -21,7 +22,14 @@ async function createLeague({ leagueName, color, city, venues = [], sponsors = [
     adminId: currentUserId
   })
 
-  await SponsorsCollection.doc(newLeagueDoc.id).set({ sponsors })
+  await SponsorsCollection.doc(newLeagueDoc.id).set({
+    sponsors: await Promise.all(sponsors.map(async p => {
+      const timestamp = firestore.Timestamp.now().toMillis()
+      const path = `/${newLeagueDoc.id}/${timestamp}${p.picture[0].name}`
+      await uploadFile(p.picture[0], path)
+      return { ...p, picture: path }
+    })),
+  })
   await VenueCollection.doc(newLeagueDoc.id).set({ venues })
   await UserClaimsCollection.doc(currentUserId).set({
     isAdmin: true,
@@ -109,7 +117,7 @@ export function CreateLeaguePage() {
               <Form.Label>Dirección</Form.Label>
               <Form.Control placeholder="Ej. Garza Sada 1010, Mty" name="info.address" ref={register({ required: true })} />
             </Form.Group>
-            <hr />  
+            <hr />
 
             <h3>Canchas</h3>
             {venueFields.map((item, index) => (
@@ -129,7 +137,14 @@ export function CreateLeaguePage() {
                 <Form.Label>Dirección del patrocinador #{index + 1}</Form.Label>
                 <Form.Control placeholder="Ej. Av. Eugenio Garza Sada 2501 Sur, Tecnológico, 64849 Monterrey, N.L." name={`sponsors[${index}].address`} ref={register({ required: true })} />
                 <Form.Label>Imagen del patrocinador #{index + 1}</Form.Label>
-                <Form.Control placeholder="Ej. www.example.com/foto.png" name={`sponsors[${index}].photo`} ref={register({ required: true })} />
+                <Form.File
+                  ref={register({ required: true })}
+                  leagueId={`sponsors[${index}].picture`}
+                  multiple={false}
+                  accept=".jpeg,.jpg,.png"
+                  name={`sponsors[${index}].picture`}
+                  data-browse="Subir"
+                />              
               </Form.Group>
             ))}
             <Button variant="secondary" onClick={appendSponsor}>Agregar patrocinador</Button>
