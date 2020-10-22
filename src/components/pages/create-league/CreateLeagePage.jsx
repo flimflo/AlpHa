@@ -2,13 +2,13 @@ import React, { useEffect } from 'react'
 import { Container, Row, Col, Form, Button } from 'react-bootstrap'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { auth } from 'firebase'
-import { LeaguesCollection, SponsorsCollection, UserClaimsCollection, VenueCollection } from '../../../firestoreCollections'
+import { LeagueInfoCollection, LeaguesCollection, SponsorsCollection, UserClaimsCollection, VenueCollection } from '../../../firestoreCollections'
 
 function formIsValid(errors) {
   return Object.entries(errors).length === 0
 }
 
-async function createLeague({ leagueName, color, city, venues = [], sponsors = [] }) {
+async function createLeague({ leagueName, color, city, venues = [], sponsors = [], info }) {
   const currentUserId = auth().currentUser.uid
   if (!currentUserId) {
     throw new Error("Debe haber una sesion de admin abierta para crear una liga")
@@ -27,6 +27,8 @@ async function createLeague({ leagueName, color, city, venues = [], sponsors = [
     isAdmin: true,
     leagueId: newLeagueDoc.id,
   })
+  await LeagueInfoCollection.doc(newLeagueDoc.id).set(info)
+
   window.location.replace('/admin')
 }
 
@@ -65,8 +67,35 @@ export function CreateLeaguePage() {
               <Form.Label>Ciudad</Form.Label>
               <Form.Control placeholder="Ej. Monterrey" name="city" ref={register({ required: true })} />
             </Form.Group>
-
             <hr />
+
+            <h3>Redes y contacto</h3>
+            <Form.Group>
+              <Form.Label>Twitter</Form.Label>
+              <Form.Control placeholder="Ej. www.example.com" name="info.twitter" ref={register({ required: true })} />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Facebook</Form.Label>
+              <Form.Control placeholder="Ej. www.example.com" name="info.facebook" ref={register({ required: true })} />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Instagram</Form.Label>
+              <Form.Control placeholder="Ej. www.example.com" name="info.instagram" ref={register({ required: true })} />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Youtube</Form.Label>
+              <Form.Control placeholder="Ej. www.example.com" name="info.youtube" ref={register({ required: true })} />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Telefono</Form.Label>
+              <Form.Control placeholder="Ej. 01800-413-2222" name="info.phone" ref={register({ required: true })} />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Dirección</Form.Label>
+              <Form.Control placeholder="Ej. Garza Sada 1010, Mty" name="info.address" ref={register({ required: true })} />
+            </Form.Group>
+            <hr />  
+
             <h3>Canchas</h3>
             {venueFields.map((item, index) => (
               <Form.Group key={index}>
