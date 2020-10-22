@@ -82,6 +82,8 @@ export function CreateLeaguePage() {
               <Form.Group key={index}>
                 <Form.Label>Nombre del patrocinador #{index + 1}</Form.Label>
                 <Form.Control placeholder="Ej. Cancha Norte" name={`sponsors[${index}].name`} ref={register({ required: true })} />
+                <Form.Label>Dirección del patrocinador #{index + 1}</Form.Label>
+                <Form.Control placeholder="Ej. Av. Eugenio Garza Sada 2501 Sur, Tecnológico, 64849 Monterrey, N.L." name={`sponsors[${index}].address`} ref={register({ required: true })} />
                 <Form.Label>Imagen del patrocinador #{index + 1}</Form.Label>
                 <Form.Control placeholder="Ej. www.example.com/foto.png" name={`sponsors[${index}].photo`} ref={register({ required: true })} />
               </Form.Group>
