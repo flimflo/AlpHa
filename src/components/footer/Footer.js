@@ -15,7 +15,6 @@ import {
 // TODO: Cambiar links
 function Footer({ color = '#1c2237', leagueId = '/empty'}) {
   const [data, loading] = useDocumentData(LeagueInfoCollection.doc(leagueId))
-  console.log(data)
 
   return (
     <div className='footer-container' style={{ backgroundColor: color }}>
