@@ -52,9 +52,9 @@ function CommentBox({ objectRelationId: relationId }) {
   }
   async function getComments() {
     if (!relationId) {
-      return () => {}
+      return 
     }
-
+    
     let commentsList = []
     let document = {}
     let _relationId = '';
@@ -72,7 +72,7 @@ function CommentBox({ objectRelationId: relationId }) {
     setDocument(document)
     setLoading(false)
   }
-  useEffect(() => getComments(), [])
+  useEffect(() => { getComments() }, [])
   React.useEffect(() => {
     const unsubscribe =
       CommentsCollection.where('relationId', '==', relationId || '')
