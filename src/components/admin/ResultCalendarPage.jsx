@@ -1,23 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { Container, Row, Col, Form, Button, Alert, Table, Card } from 'react-bootstrap'
-import { useDocumentDataOnce } from 'react-firebase-hooks/firestore';
 import { useCollectionData } from 'react-firebase-hooks/firestore'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { RolesCollections } from '../../firestoreCollections';
 import { useCurrentUser } from '../pages/auth/CurrentUser';
-// import { CalendarsCollection } from '../../../firestoreCollections'
-
-function formIsValid(errors) {
-  return Object.entries(errors).length === 0
-}
 
 export function ResultCalendarPage() {
   const user = useCurrentUser()
-  const { register, handleSubmit, errors } = useForm()
+  const { register, handleSubmit, errors, watch} = useForm()
+  const roles = watch("role")
   const [data, loading, error] = useCollectionData(
     RolesCollections.where('leagueId', '==', user?.leagueId), { idField: "matchId" })
-  //const [document, setDocument] = useState({});
-  //const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [updateMode, setUpdateMode] = useState(false);
   const [rolesList, setRolesList] = useState([]);
@@ -35,54 +28,13 @@ export function ResultCalendarPage() {
         console.error("Error updating document: ", error);
       });
   }
-  async function uploadCalendar() {
-    await RolesCollections.add({
-      roles: rolesList,
-      leagueId: user.leagueId,
-    }).then((res) => {
-      setSuccess(true);
-    }).catch((err) => {
-      console.error(err)
-    })
+
+  async function appendResult(index, golA, golB) {
+    let rolesList = role
+    rolesList[index].golesA = golA
+    rolesList[index].golesB = golB
+    updateResults(rolesList)
   }
-
-  /*async function updateTeamPlayers(vals) {
-    const team = teams.find(team => team.teamName === teamSelected)
-    if (team?.id) {
-        await TeamsCollection.doc(team.id)
-            .update({
-                players: vals.players
-            })
-            .catch(function (error) {
-                // The document probably doesn't exist.
-                console.error("Error updating document: ", error);
-            });
-        setSuccess(true)
-    }
-  }*/
-
-  /*
-  <Form.Group>
-              <Form.Label>Equipo A</Form.Label>
-              <Form.Control placeholder="Ej. Valax" name="equipoA" ref={register({ required: true })} />
-              <Form.Label>Equipo B</Form.Label>
-              <Form.Control placeholder="Ej. Valax" name="equipoB" ref={register({ required: true })} />
-              <Form.Label>Cancha</Form.Label>
-              <Form.Control placeholder="La canchita de chavita" name="cancha" ref={register({ required: true })} />
-              <Form.Label>Fecha</Form.Label>
-              <Form.Control type="date" name="fecha" ref={register({ required: true })} />
-              <Form.Label>Hora</Form.Label>
-              <Form.Control defaultValue="12:00" type="time" name="hora" ref={register({ required: true })} />
-            </Form.Group>
-            <Button variant="secondary" type="submit" disabled={!formIsValid(errors)}>Agregar Rol</Button>
-            <hr />
-            {updateMode ?
-              <Button variant="primary" onClick={updateCalendar}>Actualizar</Button>
-              :
-              <Button variant="primary" onClick={uploadCalendar}>Guardar</Button>}
-            <hr />
-            {success && <Alert variant="success">Equipo actualizado con éxito</Alert>}
-  */
 
   return (
     <Container fluid md={12}>
@@ -109,13 +61,14 @@ export function ResultCalendarPage() {
                     {role?.map((rol, index) => (
                       <tr className="tablerow" key={index}>
                         <td>{rol.equipoA}</td>
-                        <td><Form.Control type="number" value={rol.golesA} placeholder="Goles A" name="golA" ref={register({ required: true })} /></td>
+                        <td><Form.Control type="number" value={rol.golesA} placeholder="Goles A" name={`role[${index}].golA`} ref={register({ required: true })} /></td>
                         <td></td>
-                        <td><Form.Control type="number" value={rol.golesB} placeholder="Goles B" name="golB" ref={register({ required: true })} /></td>
+                        <td><Form.Control type="number" value={rol.golesB} placeholder="Goles B" name={`role[${index}].golB`} ref={register({ required: true })} /></td>
                         <td>{rol.equipoB}</td>
                         <td>{rol.cancha}</td>
                         <td>{String(rol.hora)}</td>
-                        <td><Button disabled={rol.golesA != undefined && rol.golesB != undefined} variant="primary" onClick={() => updateResults}>Guardar</Button></td>
+                        <td><Button disabled={rol.golesA != undefined && rol.golesB != undefined} 
+                          variant="primary" onClick={() => appendResult(index, roles[index].golA, roles[index].golB)}>Guardar</Button></td>
                       </tr>
                     ))}
                   </tbody>
