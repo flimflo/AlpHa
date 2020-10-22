@@ -15,7 +15,6 @@ import {
 // TODO: Cambiar links
 function Footer({ color = '#1c2237', leagueId = '/empty'}) {
   const [data, loading] = useDocumentData(LeagueInfoCollection.doc(leagueId))
-  console.log(data)
 
   return (
     <div className='footer-container' style={{ backgroundColor: color }}>
@@ -31,15 +30,7 @@ function Footer({ color = '#1c2237', leagueId = '/empty'}) {
             <Link to={`/${leagueId}/news`}>Noticias</Link>
             <Link to={`/${leagueId}/media`}>Multimedia</Link>
             <Link to={`/${leagueId}/regulation`}>Reglamento</Link>
-            <Link to='/'>Agency</Link>
-            <Link to='/'>Influencer</Link>
-          </div>
-          <div className='footer-link-items'>
-            <h3>Patrocinadores</h3>
-            <Link to={`/${leagueId}/media`}>Multimedia</Link>
-            <Link to='/'>Testimonials</Link>
-            <Link to='/'>Investors</Link>
-            <Link to='/'>Terms of Service</Link>
+            <Link to={`/${leagueId}/sponsors`}>Patrocinadores</Link>
           </div>
           <div className='footer-link-items'>
             <h3>Redes</h3>
@@ -59,50 +50,6 @@ function Footer({ color = '#1c2237', leagueId = '/empty'}) {
             </Link>
           </div>
           <small className='website-rights'>AlpHa © 2020</small>
-          <div className='social-icons'>
-            <Link
-              className='social-icon-link'
-              to='/'
-              target='_blank'
-              aria-label='Facebook'
-            >
-              <FaFacebook />
-            </Link>
-            <Link
-              className='social-icon-link'
-              to='/'
-              target='_blank'
-              aria-label='Instagram'
-            >
-              <FaInstagram />
-            </Link>
-            <Link
-              className='social-icon-link'
-              to={
-                '/'
-              }
-              target='_blank'
-              aria-label='Youtube'
-            >
-              <FaYoutube />
-            </Link>
-            <Link
-              className='social-icon-link'
-              to='/'
-              target='_blank'
-              aria-label='Twitter'
-            >
-              <FaTwitter />
-            </Link>
-            <Link
-              className='social-icon-link'
-              to='/'
-              target='_blank'
-              aria-label='LinkedIn'
-            >
-              <FaLinkedin />
-            </Link>
-          </div>
         </div>
       </section>
     </div>
