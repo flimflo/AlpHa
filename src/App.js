@@ -18,6 +18,7 @@ import { useCurrentUser } from './components/pages/auth/CurrentUser';
 import { NewsEditor } from './components/pages/news/NewsEditor';
 import { CreateCalendarPage } from './components/admin/CreateCalendarPage';
 import { MediaEditor } from './components/pages/media/MediaEditor';
+import { ResultCalendarPage } from './components/admin/ResultCalendarPage'
 
 import { useLeagueData } from './useLeagueData';
 import { Alert } from 'react-bootstrap';
@@ -56,6 +57,7 @@ function App() {
               <Route path='/admin/news' component={NewsEditor} />
               <Route path='/admin/media' component={MediaEditor} />
               <Route path='/admin/create-calendar' component={CreateCalendarPage} />
+              <Route path='/admin/add-Result' component={ResultCalendarPage} />
               <Route path='/admin/top-list' component={TopListAdmin} />
               <Redirect to='/admin/create-calendar' />
             </Switch>

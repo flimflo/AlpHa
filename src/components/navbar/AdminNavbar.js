@@ -73,6 +73,15 @@ function Navbar() {
               </li>
               <li className='nav-item'>
                 <Link
+                  to='/admin/add-Result'
+                  className='nav-links'
+                  onClick={closeMobileMenu}
+                >
+                  Resultados
+                </Link>
+              </li>
+              <li className='nav-item'>
+                <Link
                  
                   className='nav-links'
                   onClick={() => { 
