@@ -10,9 +10,11 @@ import './Home.css';
 import RoleTable from "../../role-table/RoleTable";
 import TopList from "../../top-list/TopList";
 import {useDocument} from "react-firebase-hooks/firestore";
+import { useParams } from "react-router-dom";
 
 // TODO: Mover boton de cerrar sesion a otra parte
 function Home() {
+  const { leagueId } = useParams();
   const [value, loading, error] = useDocument(
     firebase.firestore().doc('carousel-images/fP15kW3KgUXE52hKDSYB'),
     {
@@ -50,7 +52,9 @@ function Home() {
               <LeaderboardTable/>
             </Col>
             <Col sm={6}>
-              <CommentBox/>
+              <CommentBox
+                objectRelationId={leagueId}
+              />
             </Col>
           </Row>
         </Container>

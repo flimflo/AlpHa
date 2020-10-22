@@ -1,6 +1,8 @@
 import React from 'react';
 import './Footer.css';
 import { Link } from 'react-router-dom';
+import { LeagueInfoCollection } from "../../firestoreCollections";
+import {useDocumentData} from "react-firebase-hooks/firestore";
 import {
   FaFacebook,
   FaInstagram,
@@ -12,6 +14,8 @@ import {
 
 // TODO: Cambiar links
 function Footer({ color = '#1c2237', leagueId = '/empty'}) {
+  const [data, loading] = useDocumentData(LeagueInfoCollection.doc(leagueId))
+
   return (
     <div className='footer-container' style={{ backgroundColor: color }}>
       <div className='footer-links'>
@@ -26,22 +30,14 @@ function Footer({ color = '#1c2237', leagueId = '/empty'}) {
             <Link to={`/${leagueId}/news`}>Noticias</Link>
             <Link to={`/${leagueId}/media`}>Multimedia</Link>
             <Link to={`/${leagueId}/regulation`}>Reglamento</Link>
-            <Link to='/'>Agency</Link>
-            <Link to='/'>Influencer</Link>
-          </div>
-          <div className='footer-link-items'>
-            <h3>Patrocinadores</h3>
-            <Link to={`/${leagueId}/media`}>Multimedia</Link>
-            <Link to='/'>Testimonials</Link>
-            <Link to='/'>Investors</Link>
-            <Link to='/'>Terms of Service</Link>
+            <Link to={`/${leagueId}/sponsors`}>Patrocinadores</Link>
           </div>
           <div className='footer-link-items'>
             <h3>Redes</h3>
-            <Link to='/'>Instagram</Link>
-            <Link to='/'>Facebook</Link>
-            <Link to='/'>Youtube</Link>
-            <Link to='/'>Twitter</Link>
+            <a target="_blank" href={`http://${data?.instagram}`}>Instagram</a>
+            <a target="_blank" href={`http://${data?.facebook}`}>Facebook</a>
+            <a target="_blank" href={`http://${data?.youtube}`}>Youtube</a>
+            <a target="_blank" href={`http://${data?.twitter}`}>Twitter</a>
           </div>
         </div>
       </div>
@@ -54,50 +50,6 @@ function Footer({ color = '#1c2237', leagueId = '/empty'}) {
             </Link>
           </div>
           <small className='website-rights'>AlpHa © 2020</small>
-          <div className='social-icons'>
-            <Link
-              className='social-icon-link'
-              to='/'
-              target='_blank'
-              aria-label='Facebook'
-            >
-              <FaFacebook />
-            </Link>
-            <Link
-              className='social-icon-link'
-              to='/'
-              target='_blank'
-              aria-label='Instagram'
-            >
-              <FaInstagram />
-            </Link>
-            <Link
-              className='social-icon-link'
-              to={
-                '/'
-              }
-              target='_blank'
-              aria-label='Youtube'
-            >
-              <FaYoutube />
-            </Link>
-            <Link
-              className='social-icon-link'
-              to='/'
-              target='_blank'
-              aria-label='Twitter'
-            >
-              <FaTwitter />
-            </Link>
-            <Link
-              className='social-icon-link'
-              to='/'
-              target='_blank'
-              aria-label='LinkedIn'
-            >
-              <FaLinkedin />
-            </Link>
-          </div>
         </div>
       </section>
     </div>
