@@ -1,0 +1,11 @@
+.news-table {
+  display: flex;
+  flex-direction: column;
+}
+
+.card {
+  max-width: unset;
+}
+.card-title {
+  font-size: 40px;
+}
