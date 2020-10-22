@@ -11,9 +11,9 @@ function Sponsors() {
   useEffect(() => {
     const unsubscribe = SponsorsCollection.doc(leagueId)
       .onSnapshot(s => {
-        Promise.all(s.data().sponsors.map(async d => ({
+        return Promise.all(s.data().sponsors.map(async d => ({
           name: d.name,
-          pictureUrl: d.photo,
+          pictureUrl: await getStoragePath(d.picture || ''),
           address: d.address,
         })))
           .then(setData)
@@ -26,7 +26,7 @@ function Sponsors() {
     <>
       <h1>Sponsors</h1>
       {data.map(d => (
-        <Card style={{ width: '18rem' }} className="m-4">
+        <Card style={{ width: '18rem' }} className="m-4" key={d.name}>
         {d.pictureUrl && <Card.Img variant="top" src={d.pictureUrl} />}
         <Card.Body>
           <Card.Title>{d.name}</Card.Title>
