@@ -38,6 +38,8 @@ function App() {
   const { leagueId, color, leagueName } = useLeagueData()
   const user = useCurrentUser()
 
+
+  console.log(user)
   return (
     <>
       <Switch>
@@ -75,7 +77,6 @@ function App() {
               <Route path="/:leagueId/signup" exact component={SignIn} />
             </Switch>
             <Footer color={color} leagueId={leagueId} />
-
           </>
         }
         {
@@ -83,10 +84,12 @@ function App() {
             * Aqui ya tienen sesion iniciada pero tecnicamente no son admins por que apenas 
             * van a crear su liga o por que van a inscribir a su equipo
             */
-          user && <>
+          user && 
+          <Switch>
             <Route path='/create-league' exact component={CreateLeaguePage} />
             <Route path='/:leagueId/signup' exact component={AddTeamToLeague} />
-          </>
+            <Redirect to='/create-league'/>
+          </Switch>
         }
       </Switch>
     </>
