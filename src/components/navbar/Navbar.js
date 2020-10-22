@@ -64,7 +64,7 @@ function Navbar({ leagueId = '', title = 'AlpHa', color = '#1c2237'}) {
               </li>
               <li className='nav-item'>
                 <Link
-                  to='/sponsors'
+                  to={`/${leagueId}/sponsors`}
                   className='nav-links'
                   onClick={closeMobileMenu}
                 >
