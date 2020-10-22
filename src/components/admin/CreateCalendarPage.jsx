@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { RolesCollections } from '../../firestoreCollections';
 import { useCurrentUser } from '../pages/auth/CurrentUser';
 // import { CalendarsCollection } from '../../../firestoreCollections'
-
+// hola
 function formIsValid(errors) {
   return Object.entries(errors).length === 0
 }
@@ -110,7 +110,7 @@ export function CreateCalendarPage() {
               <Form.Label>Cancha</Form.Label>
               <Form.Control placeholder="La canchita de chavita" name="cancha" ref={register({ required: true })} />
               <Form.Label>Fecha</Form.Label>
-              <Form.Control defaultValue={Date()} type="date" name="fecha" ref={register({ required: true })} />
+              <Form.Control type="date" name="fecha" ref={register({ required: true })} />
               <Form.Label>Hora</Form.Label>
               <Form.Control defaultValue="12:00" type="time" name="hora" ref={register({ required: true })} />
             </Form.Group>
