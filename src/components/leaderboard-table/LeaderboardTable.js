@@ -1,43 +1,58 @@
-import React from "react";
+import React, { useEffect } from 'react'
 import Card from 'react-bootstrap/Card';
 import Table from 'react-bootstrap/Table';
 import firebase from "firebase";
-import { useDocument } from 'react-firebase-hooks/firestore';
+import { useParams } from "react-router-dom";
+import { useCollectionData } from 'react-firebase-hooks/firestore'
+import { TeamsCollection } from "../../firestoreCollections"
 import './LeaderboardTable.css';
 
 function LeaderboardTable() {
+  const { leagueId } = useParams()
+  const [data, loading, error] = useCollectionData(
+    TeamsCollection.where('leagueId', '==', leagueId))
+  
 
-  const [value, loading, error] = useDocument(
-    firebase.firestore().doc('leaderboard/ZmlVX5S9FdAiaCDaxfKg'),
-    {
-      snapshotListenOptions: { includeMetadataChanges: false },
+  function sortTeams() {
+    if(data != null) {
+      data.sort(function(a,b){return b.won - a.won || b.tied - a.tied;});
     }
-  );
+  }
+
+  useEffect(() => { sortTeams() }, [data])
 
   return(
     <Card className="card">
       <h3>Tabla General</h3>
       {error && <strong>Error: {JSON.stringify(error)}</strong>}
       {loading && <span>Collection: Loading...</span>}
-      {value && (
+      {data && (
         <Table responsive>
           <thead>
           <tr>
             <th>#</th>
             <th>Equipo</th>
+            <th>Pnts.</th>
+            <th>G</th>
+            <th>E</th>
+            <th>P</th>
+            <th>Dif.</th>
             <th>G+</th>
             <th>G-</th>
-            <th>Puntos</th>
           </tr>
           </thead>
           <tbody>
-          {value.data().teams.map((team, index) =>
+          {data.map((team, index) =>
             <tr className="tablerow" key={index}>
               <td>{ index + 1 }</td>
               <td>{ team.teamName }</td>
-              <td>{ team.goals }</td>
-              <td>{ team.goalsAgainst }</td>
-              <td>{ team.points }</td>
+              <td>{ team.won * 3 + team.tied }</td>
+              <td>{ team.won }</td>
+              <td>{ team.tied }</td>
+              <td>{ team.lost }</td>
+              <td>{ team.golesFavor - team.golesContra }</td>
+              <td>{ team.golesFavor }</td>
+              <td>{ team.golesContra }</td>
             </tr>
           )}
           </tbody>
