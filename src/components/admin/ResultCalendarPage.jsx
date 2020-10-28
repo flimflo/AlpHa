@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Container, Row, Col, Form, Button, Alert, Table, Card } from 'react-bootstrap'
 import { useCollectionData } from 'react-firebase-hooks/firestore'
 import { useForm, useWatch } from 'react-hook-form'
-import { RolesCollections } from '../../firestoreCollections';
+import { RolesCollections, TeamsCollection } from '../../firestoreCollections';
 import { useCurrentUser } from '../pages/auth/CurrentUser';
 
 export function ResultCalendarPage() {
@@ -35,7 +35,41 @@ export function ResultCalendarPage() {
       rolesList[index].golesA = golA
       rolesList[index].golesB = golB
       updateResults(rolesList)
+      updateTeamStats(rolesList[index].equipoA, rolesList[index].equipoB, golA, golB)
     }
+  }
+
+  async function updateTeamStats(equipoA, equipoB, golA, golB) {
+    await TeamsCollection.where('leagueId', '==', user?.leagueId)
+    .where('teamName', '==', equipoA)
+    .get()
+    .then((docs) => {
+      docs.forEach((doc) => {
+        TeamsCollection.doc(doc.id).update({
+          golesFavor: doc.data().golesFavor + golA,
+          golesContra: doc.data().golesContra + golA,
+          won: golA > golB ? doc.data().won + 1 : doc.data().won,
+          lost: golA < golB ? doc.data().lost + 1 : doc.data().lost,
+          tied: golA == golB ? doc.data().tied + 1 : doc.data().tied
+        })
+      })
+    })
+
+    await TeamsCollection.where('leagueId', '==', user?.leagueId)
+    .where('teamName', '==', equipoB)
+    .get()
+    .then((docs) => {
+      docs.forEach((doc) => {
+        TeamsCollection.doc(doc.id).update({
+          golesFavor: doc.data().golesFavor + golA,
+          golesContra: doc.data().golesContra + golA,
+          won: golA < golB ? doc.data().won + 1 : doc.data().won,
+          lost: golA > golB ? doc.data().lost + 1 : doc.data().lost,
+          tied: golA == golB ? doc.data().tied + 1 : doc.data().tied
+        })
+      })
+    })
+    
   }
 
   return (
@@ -69,7 +103,7 @@ export function ResultCalendarPage() {
                         <td>{rol.equipoB}</td>
                         <td>{rol.cancha}</td>
                         <td>{String(rol.hora)}</td>
-                        <td><Button disabled={rol.golesA != undefined && rol.golesB != undefined} 
+                        <td><Button disabled={rol.golesA !== undefined && rol.golesB !== undefined} 
                           variant="primary" onClick={() => appendResult(index, roles[index].golA, roles[index].golB)}>Guardar</Button></td>
                       </tr>
                     ))}
