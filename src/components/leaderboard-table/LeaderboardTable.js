@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from 'react'
 import Card from 'react-bootstrap/Card';
 import Table from 'react-bootstrap/Table';
 import firebase from "firebase";
@@ -11,7 +11,16 @@ function LeaderboardTable() {
   const { leagueId } = useParams()
   const [data, loading, error] = useCollectionData(
     TeamsCollection.where('leagueId', '==', leagueId))
-  console.log(data)
+  
+
+  function sortTeams() {
+    if(data != null) {
+      data.sort(function(a,b){return b.won - a.won || b.tied - a.tied;});
+    }
+  }
+
+  useEffect(() => { sortTeams() }, [data])
+
   return(
     <Card className="card">
       <h3>Tabla General</h3>
