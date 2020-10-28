@@ -27,6 +27,11 @@ export function AddTeamToLeague() {
         await TeamsCollection.add({
             leagueId: leagueId,
             teamName: teamName,
+            won: 0,
+            tied: 0,
+            lost: 0,
+            golesFavor: 0,
+            golesContra: 0,
             players: await Promise.all(players.map(async p => {
                 const timestamp = firestore.Timestamp.now().toMillis()
                 const path = `/${leagueId}/${timestamp}${p.picture[0].name}`
