@@ -28,6 +28,7 @@ export function AddTeamToLeague() {
             leagueId: leagueId,
             teamName: teamName,
             won: 0,
+            tied: 0,
             lost: 0,
             golesFavor: 0,
             golesContra: 0,
