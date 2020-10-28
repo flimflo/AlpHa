@@ -46,8 +46,8 @@ export function ResultCalendarPage() {
     .then((docs) => {
       docs.forEach((doc) => {
         TeamsCollection.doc(doc.id).update({
-          golesFavor: doc.data().golesFavor + golA,
-          golesContra: doc.data().golesContra + golA,
+          golesFavor: doc.data().golesFavor + parseInt(golA),
+          golesContra: doc.data().golesContra + parseInt(golA),
           won: golA > golB ? doc.data().won + 1 : doc.data().won,
           lost: golA < golB ? doc.data().lost + 1 : doc.data().lost,
           tied: golA == golB ? doc.data().tied + 1 : doc.data().tied
@@ -61,8 +61,8 @@ export function ResultCalendarPage() {
     .then((docs) => {
       docs.forEach((doc) => {
         TeamsCollection.doc(doc.id).update({
-          golesFavor: doc.data().golesFavor + golA,
-          golesContra: doc.data().golesContra + golA,
+          golesFavor: doc.data().golesFavor + parseInt(golB),
+          golesContra: doc.data().golesContra + parseInt(golB),
           won: golA < golB ? doc.data().won + 1 : doc.data().won,
           lost: golA > golB ? doc.data().lost + 1 : doc.data().lost,
           tied: golA == golB ? doc.data().tied + 1 : doc.data().tied
