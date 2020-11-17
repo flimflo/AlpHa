@@ -10,8 +10,6 @@ function formIsValid(errors) {
   return Object.entries(errors).length === 0
 }
 
-
-
 export function CreateCalendarPage() {
   const user = useCurrentUser()
   const { register, handleSubmit, errors } = useForm()
@@ -48,7 +46,13 @@ export function CreateCalendarPage() {
     const parsedDate = new Date(vals.fecha)
     parsedDate.setHours(parseInt(vals.hora.slice(0, 2)), parseInt(vals.hora.slice(3, 5)))
     rolesList.push({ ...vals, hora: String(parsedDate.toLocaleTimeString()) });
+    if (updateMode) {
+      updateCalendar()
+    } else {
+      uploadCalendar()
+    }
   }
+
   async function updateCalendar() {
     if (document.id) {
       await RolesCollections.doc(document.id)
@@ -62,6 +66,7 @@ export function CreateCalendarPage() {
         });
     }
   }
+
   async function uploadCalendar() {
     await RolesCollections.add({
       roles: rolesList,
@@ -72,6 +77,7 @@ export function CreateCalendarPage() {
       console.error(err)
     })
   }
+
   return (
     <Container fluid md={12}>
       <Row>
@@ -114,12 +120,7 @@ export function CreateCalendarPage() {
               <Form.Label>Hora</Form.Label>
               <Form.Control defaultValue="12:00" type="time" name="hora" ref={register({ required: true })} />
             </Form.Group>
-            <Button variant="secondary" type="submit" disabled={!formIsValid(errors)}>Agregar Rol</Button>
-            <hr />
-            {updateMode ?
-              <Button variant="primary" onClick={updateCalendar}>Actualizar</Button>
-              :
-              <Button variant="primary" onClick={uploadCalendar}>Guardar</Button>}
+            <Button variant="primary" type="submit" disabled={!formIsValid(errors)}>Agregar Rol</Button>
             <hr />
             {success && <Alert variant="success">Equipo actualizado con éxito</Alert>}
           </Form>
