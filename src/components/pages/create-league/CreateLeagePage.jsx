@@ -1,16 +1,17 @@
 import React, { useEffect } from 'react'
 import { Container, Row, Col, Form, Button } from 'react-bootstrap'
 import { useForm, useFieldArray } from 'react-hook-form'
-import { auth, firestore } from 'firebase'
+import { firestore } from 'firebase'
 import { LeagueInfoCollection, LeaguesCollection, SponsorsCollection, UserClaimsCollection, VenueCollection } from '../../../firestoreCollections'
 import { uploadFile } from '../../../firebaseStorage'
+import { auth } from '../../../firebase';
 
 function formIsValid(errors) {
   return Object.entries(errors).length === 0
 }
 
 async function createLeague({ leagueName, color, city, venues = [], sponsors = [], info }) {
-  const currentUserId = auth().currentUser.uid
+  const currentUserId = auth.currentUser.uid
   if (!currentUserId) {
     throw new Error("Debe haber una sesion de admin abierta para crear una liga")
   }
@@ -53,6 +54,9 @@ export function CreateLeaguePage() {
     name: "sponsors"
   })
 
+  function removeExample(index) {
+    sponsorFields.splice(index, 1);
+  }
 
   useEffect(() => { appendVenue() }, [])
   return (
@@ -144,13 +148,18 @@ export function CreateLeaguePage() {
                   accept=".jpeg,.jpg,.png"
                   name={`sponsors[${index}].picture`}
                   data-browse="Subir"
-                />              
+                />       
+                <Button variant="warning" onClick={() => removeExample(index)}>Quitar</Button>       
               </Form.Group>
             ))}
             <Button variant="secondary" onClick={appendSponsor}>Agregar patrocinador</Button>
 
             <hr />
             <Button variant="primary" disabled={!formIsValid(errors)} type="submit">Crear Liga</Button>
+            <Button variant="danger" onClick={() => { 
+                    auth.signOut()
+                    window.location.replace(`/`)
+                }}>Cancelar</Button>
           </Form>
         </Col>
       </Row>
