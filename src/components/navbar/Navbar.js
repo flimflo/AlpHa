@@ -71,6 +71,17 @@ function Navbar({ leagueId = '', title = 'AlpHa', color = '#1c2237'}) {
                   Patrocinadores
                 </Link>
               </li>
+              {!currentUser &&
+               <li className='nav-item'>
+               <Link
+                 to={`/create-league`}
+                 className='nav-links'
+                 onClick={closeMobileMenu}
+               >
+                 Crea tu liga
+               </Link>
+             </li> 
+              }
               {currentUser &&
               <li className='nav-item'>
                 <Link

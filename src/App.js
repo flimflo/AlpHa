@@ -65,7 +65,7 @@ function App() {
         }
         <Route path="/admin" exact component={SignIn} />
 
-        {!user && <Route path='/create-league' component={SignIn} />}
+        {!user && <Route path='/' exact component={SignIn} />}
         {!user &&
           <>
             <Navbar title={leagueName} color={color} leagueId={leagueId} />

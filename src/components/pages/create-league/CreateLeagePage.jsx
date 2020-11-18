@@ -1,16 +1,17 @@
 import React, { useEffect } from 'react'
 import { Container, Row, Col, Form, Button } from 'react-bootstrap'
 import { useForm, useFieldArray } from 'react-hook-form'
-import { auth, firestore } from 'firebase'
+import { firestore } from 'firebase'
 import { LeagueInfoCollection, LeaguesCollection, SponsorsCollection, UserClaimsCollection, VenueCollection } from '../../../firestoreCollections'
 import { uploadFile } from '../../../firebaseStorage'
+import { auth } from '../../../firebase';
 
 function formIsValid(errors) {
   return Object.entries(errors).length === 0
 }
 
 async function createLeague({ leagueName, color, city, venues = [], sponsors = [], info }) {
-  const currentUserId = auth().currentUser.uid
+  const currentUserId = auth.currentUser.uid
   if (!currentUserId) {
     throw new Error("Debe haber una sesion de admin abierta para crear una liga")
   }
@@ -43,16 +44,15 @@ async function createLeague({ leagueName, color, city, venues = [], sponsors = [
 
 export function CreateLeaguePage() {
   const { register, handleSubmit, control, errors } = useForm()
-  const { fields: venueFields, append: appendVenue } = useFieldArray({
+  const { fields: venueFields, append: appendVenue, remove: removeVenues } = useFieldArray({
     control,
     name: "venues"
   })
 
-  const { fields: sponsorFields, append: appendSponsor } = useFieldArray({
+  const { fields: sponsorFields, append: appendSponsor, remove: removeSponsors } = useFieldArray({
     control,
     name: "sponsors"
   })
-
 
   useEffect(() => { appendVenue() }, [])
   return (
@@ -121,9 +121,10 @@ export function CreateLeaguePage() {
 
             <h3>Canchas</h3>
             {venueFields.map((item, index) => (
-              <Form.Group key={index}>
+              <Form.Group key={item.id}>
                 <Form.Label>Nombre de Cancha #{index + 1}</Form.Label>
                 <Form.Control placeholder="Ej. Cancha Norte" name={`venues[${index}].name`} ref={register({ required: true })} />
+                <Button variant="warning" onClick={() => removeVenues(index)}>Quitar</Button>       
               </Form.Group>
             ))}
             <Button variant="secondary" onClick={appendVenue}>Agregar cancha</Button>
@@ -131,7 +132,7 @@ export function CreateLeaguePage() {
             <hr />
             <h3>Patrocinadores</h3>
             {sponsorFields.map((item, index) => (
-              <Form.Group key={index}>
+              <Form.Group key={item.id}>
                 <Form.Label>Nombre del patrocinador #{index + 1}</Form.Label>
                 <Form.Control placeholder="Ej. Cancha Norte" name={`sponsors[${index}].name`} ref={register({ required: true })} />
                 <Form.Label>Dirección del patrocinador #{index + 1}</Form.Label>
@@ -144,13 +145,18 @@ export function CreateLeaguePage() {
                   accept=".jpeg,.jpg,.png"
                   name={`sponsors[${index}].picture`}
                   data-browse="Subir"
-                />              
+                />       
+                <Button variant="warning" onClick={() => removeSponsors(index)}>Quitar</Button>       
               </Form.Group>
             ))}
             <Button variant="secondary" onClick={appendSponsor}>Agregar patrocinador</Button>
 
             <hr />
             <Button variant="primary" disabled={!formIsValid(errors)} type="submit">Crear Liga</Button>
+            <Button variant="danger" onClick={() => { 
+                    auth.signOut()
+                    window.location.replace(`/`)
+                }}>Cancelar</Button>
           </Form>
         </Col>
       </Row>

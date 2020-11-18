@@ -18,7 +18,8 @@ function Navbar() {
       <IconContext.Provider value={{ color: '#BABABA' }}>
         <nav className='navbar'>
           <div className='navbar-container container'>
-            <Link className='navbar-logo' onClick={closeMobileMenu}>
+            <Link className='navbar-logo' onClick={closeMobileMenu}
+              to='/admin/create-calendar'>
               <FaAutoprefixer className='navbar-icon' />
               Admin
             </Link>
